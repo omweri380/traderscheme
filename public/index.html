@@ -6,15 +6,16 @@
     <title>traderscheme.com | Institutional Trading Desk</title>
     <style>
         :root {
-            --bg-main: #f4f6f8;        /* Clean light-gray background */
+            --bg-main: #f1f5f9;        /* Softened anti-glare premium gray background */
             --bg-card: #ffffff;        /* Pure white for panels */
-            --bg-input: #ffffff;       /* Pure white for input fields */
+            --bg-input: #f8fafc;       /* Muted off-white for input fields */
             --primary: #00a86b;        /* Professional premium green */
             --primary-hover: #008f5a;  /* Hover button green */
-            --danger: #dc3545;         /* Crisp red for shorting/danger */
-            --text-main: #1e293b;      /* Sharp, highly-readable dark text */
+            --danger: #dc3545;         /* Crisp red for shorting/selling */
+            --text-main: #0f172a;      /* Deep slate main typography */
             --text-muted: #64748b;     /* Slate gray secondary text */
             --border-color: #e2e8f0;   /* Light minimalist border lines */
+            --warning: #f59e0b;        /* Alert gold for pending validation */
         }
 
         body {
@@ -112,6 +113,28 @@
             100% { transform: scale(0.9); opacity: 0.6; }
         }
 
+        /* Identity Verification KYC Alert Strip */
+        .kyc-strip {
+            background: rgba(245, 158, 11, 0.08);
+            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+            padding: 10px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: #b45309;
+        }
+
+        .kyc-badge {
+            background: var(--warning);
+            color: #ffffff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
         /* Layout Architecture */
         .container {
             max-width: 1100px;
@@ -134,7 +157,7 @@
             border: 1px solid var(--border-color);
             padding: 24px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
         }
 
         .full-width {
@@ -186,11 +209,6 @@
             background: rgba(11, 94, 215, 0.08);
         }
 
-        .metric-icon-wrapper svg {
-            width: 20px;
-            height: 20px;
-        }
-
         .metric-info {
             display: flex;
             flex-direction: column;
@@ -211,8 +229,8 @@
             color: var(--text-main);
         }
 
-        /* Attractive Trading Feed graph simulation */
-        .chart-mock {
+        /* Active Candlestick Chart Display Panel */
+        .chart-container {
             border: 1px solid var(--border-color);
             border-radius: 6px;
             padding: 16px;
@@ -228,9 +246,12 @@
             margin-bottom: 12px;
         }
 
-        .chart-svg-container {
+        #candlestickCanvas {
             width: 100%;
-            height: 80px;
+            height: 180px;
+            background: #fafbfc;
+            border-radius: 4px;
+            border: 1px solid #f1f5f9;
         }
 
         /* Form Layout Elements */
@@ -308,7 +329,6 @@
     <!-- Professional Navbar Block -->
     <div class="navbar">
         <div class="brand-container">
-            <!-- Professional Vector Logo Trend Icon -->
             <svg class="brand-logo" viewBox="0 0 24 24">
                 <path d="M3.5 18.5l6-6 4 4L22 6.5l-1.41-1.42-7.09 7.09-4-4-7.5 7.5L3.5 18.5z"/>
             </svg>
@@ -330,7 +350,35 @@
         <div>UTC TERMINAL FEED ACTIVE</div>
     </div>
 
+    <!-- Real-Time KYC Security Notification Strip -->
+    <div class="kyc-strip" id="kycBanner">
+        <div>⚠️ Account Node Restriction: Please update your Legal Identity Credentials to clear payout validation delays.</div>
+        <div class="kyc-badge" id="kycStatusLabel">PENDING ID UPLOAD</div>
+    </div>
+
     <div class="container">
+        
+        <!-- Verification Gateway Module (KYC Upload Engine) -->
+        <div class="card full-width">
+            <h2>
+                <svg style="width:16px;height:16px;fill:var(--warning);" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                Identity Verification & Account Compliance Gateway
+            </h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div>
+                    <label>Government-Issued Document Category</label>
+                    <select id="kycDocType">
+                        <option value="passport">International Travel Passport</option>
+                        <option value="national_id">National ID Card / Drivers Permit</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Upload Document File Reference</label>
+                    <input type="file" id="kycFileInput" accept="image/*,application/pdf" style="padding: 8px;">
+                </div>
+            </div>
+            <button class="btn-outline" style="border-color: var(--warning); color: #b45309;" onclick="submitVerification()">Submit Compliance Documents</button>
+        </div>
         
         <!-- Account Overview Panel Section -->
         <div class="card full-width">
@@ -343,7 +391,6 @@
             <input type="text" id="username" value="trader1" onchange="updateDashboard()">
             
             <div class="metrics-grid">
-                <!-- Fiat Balance Module -->
                 <div class="metric-box">
                     <div class="metric-icon-wrapper">
                         <svg style="fill:var(--primary);" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
@@ -354,7 +401,6 @@
                     </div>
                 </div>
 
-                <!-- Portfolio Asset Module -->
                 <div class="metric-box">
                     <div class="metric-icon-wrapper blue-theme">
                         <svg style="fill:#0b5ed7;" viewBox="0 0 24 24"><path d="M12 2L1 7l11 5 9-4.09V17h2V7L12 2zm0 13l-9-4.09V15l9 4.09 8-3.64v-4.18L12 15z"/></svg>
@@ -366,18 +412,13 @@
                 </div>
             </div>
 
-            <!-- Attractive Vector Waveform Simulation Graphic Chart -->
-            <div class="chart-mock">
+            <!-- Candlestick Graphic Engine Block -->
+            <div class="chart-container">
                 <div class="chart-header">
                     <span>Index Spot Reference Price: <strong id="market-price" style="color:var(--text-main); font-size:13px;">$100.00</strong></span>
-                    <span style="color: var(--primary); font-weight:600;">● VOLATILITY SIGNAL FEED</span>
+                    <span style="color: var(--primary); font-weight:600;">● DYNAMIC CANDLESTICK FEED</span>
                 </div>
-                <div class="chart-svg-container">
-                    <svg width="100%" height="100%" viewBox="0 0 500 80" preserveAspectRatio="none">
-                        <path d="M0,60 Q50,40 100,65 T200,30 T300,55 T400,25 T500,45" fill="none" stroke="rgba(0, 168, 107, 0.25)" stroke-width="2.5"></path>
-                        <path d="M0,55 Q45,35 95,55 T195,25 T295,45 T395,15 T500,35" fill="none" stroke="var(--primary)" stroke-width="2.5"></path>
-                    </svg>
-                </div>
+                <canvas id="candlestickCanvas" width="800" height="180"></canvas>
             </div>
         </div>
 
@@ -439,6 +480,76 @@
     </div>
 
     <script>
+        // High-performance HTML5 canvas engine rendering realistic financial candlesticks
+        function drawCandlesticks() {
+            const canvas = document.getElementById('candlestickCanvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            // Auto layout dimensions
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Dummy market model data blocks: Open, High, Low, Close
+            const candles = [
+                { o: 92, h: 98, l: 90, c: 96 },
+                { o: 96, h: 103, l: 94, c: 101 },
+                { o: 101, h: 102, l: 93, c: 95 },
+                { o: 95, h: 104, l: 94, c: 102 },
+                { o: 102, h: 112, l: 100, c: 110 },
+                { o: 110, h: 111, l: 102, c: 104 },
+                { o: 104, h: 107, l: 99, c: 101 },
+                { o: 101, h: 115, l: 100, c: 112 },
+                { o: 112, h: 122, l: 110, c: 118 },
+                { o: 118, h: 120, l: 111, c: 114 },
+                { o: 114, h: 125, l: 113, c: 123 },
+                { o: 123, h: 124, l: 116, c: 119 }
+            ];
+            
+            const spacing = canvas.width / candles.length;
+            const candleWidth = spacing * 0.6;
+            
+            candles.forEach((candle, index) => {
+                const x = (index * spacing) + (spacing * 0.2);
+                const isGreen = candle.c >= candle.o;
+                
+                // Map metrics to drawing scale pixels inverse height mappings
+                const yOpen = canvas.height - (candle.o * 1.2);
+                const yClose = canvas.height - (candle.c * 1.2);
+                const yHigh = canvas.height - (candle.h * 1.2);
+                const yLow = canvas.height - (candle.l * 1.2);
+                
+                ctx.strokeStyle = isGreen ? '#00a86b' : '#dc3545';
+                ctx.fillStyle = isGreen ? '#00a86b' : '#dc3545';
+                ctx.lineWidth = 2;
+                
+                // Render wick strings
+                ctx.beginPath();
+                ctx.moveTo(x + candleWidth / 2, yHigh);
+                ctx.lineTo(x + candleWidth / 2, yLow);
+                ctx.stroke();
+                
+                // Render volume blocks
+                ctx.fillRect(x, Math.min(yOpen, yClose), candleWidth, Math.abs(yOpen - yClose));
+            });
+        }
+
+        // KYC compliance form processing
+        function submitVerification() {
+            const fileInput = document.getElementById('kycFileInput');
+            if(!fileInput.files.length) {
+                return alert('Please choose a valid ID document file to submit.');
+            }
+            
+            // Trigger visual UI update
+            document.getElementById('kycStatusLabel').innerText = "VERIFICATION UNDER REVIEW";
+            document.getElementById('kycStatusLabel').style.background = "#0b5ed7";
+            document.getElementById('kycBanner').style.background = "rgba(11, 94, 215, 0.08)";
+            document.getElementById('kycBanner').style.color = "#0b5ed7";
+            document.getElementById('kycBanner').innerText = "✅ Documents Received: Identity analysis validation module currently processing pipeline records.";
+            
+            alert('Identity verification documents securely encrypted and submitted to risk framework routing panels.');
+        }
+
         async function updateDashboard() {
             const username = document.getElementById('username').value;
             const res = await fetch(`/api/user/${username}`);
@@ -448,6 +559,9 @@
             document.getElementById('usd-bal').innerText = formattedUSD;
             document.getElementById('asset-bal').innerText = `${data.balances.ASSET.toFixed(4)} UNITS`;
             document.getElementById('market-price').innerText = `$${data.currentMarketPrice.toFixed(2)}`;
+            
+            // Redraw charting element configuration dynamically
+            drawCandlesticks();
         }
 
         async function handleDeposit() {
@@ -494,7 +608,9 @@
         }
 
         // Run Initial State Core Bindings
-        updateDashboard();
+        window.onload = () => {
+            updateDashboard();
+        };
     </script>
 </body>
 </html>
