@@ -27,6 +27,78 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* Authentication Portal Modal Overlay */
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.3s ease;
+        }
+
+        .auth-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            padding: 32px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-sizing: border-box;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .auth-logo {
+            width: 42px;
+            height: 42px;
+            fill: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .auth-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .auth-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .auth-tab.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: -2px;
+        }
+
         /* Professional Header bar with Logo */
         .navbar {
             background: var(--bg-card);
@@ -326,6 +398,40 @@
 </head>
 <body>
 
+    <!-- Dynamic Authentication Portal Layer -->
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-card">
+            <div class="auth-header">
+                <svg class="auth-logo" viewBox="0 0 24 24">
+                    <path d="M3.5 18.5l6-6 4 4L22 6.5l-1.41-1.42-7.09 7.09-4-4-7.5 7.5L3.5 18.5z"/>
+                </svg>
+                <h1 class="auth-title">Welcome to traderscheme</h1>
+                <p class="auth-subtitle">Secure Multi-Asset Brokerage Node</p>
+            </div>
+
+            <div class="auth-tabs">
+                <div class="auth-tab active" id="tabLogin" onclick="switchAuthMode('login')">Sign In</div>
+                <div class="auth-tab" id="tabRegister" onclick="switchAuthMode('register')">Create Account</div>
+            </div>
+
+            <!-- Multi-State Auth Forms -->
+            <div id="authFormBody">
+                <label for="authEmail">Secure Email Address</label>
+                <input type="email" id="authEmail" placeholder="name@example.com">
+
+                <label for="authPassword">Secret Security Password</label>
+                <input type="password" id="authPassword" placeholder="••••••••">
+
+                <div id="registerFields" style="display: none;">
+                    <label for="authUsername">Operator Identifier Tag</label>
+                    <input type="text" id="authUsername" value="trader1">
+                </div>
+
+                <button class="btn-green" style="margin-top: 8px;" onclick="handleAuthentication()" id="authSubmitBtn">Initialize Terminal Connection</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Professional Navbar Block -->
     <div class="navbar">
         <div class="brand-container">
@@ -480,16 +586,43 @@
     </div>
 
     <script>
+        let operationalMode = "login";
+
+        function switchAuthMode(mode) {
+            operationalMode = mode;
+            document.getElementById('tabLogin').classList.toggle('active', mode === 'login');
+            document.getElementById('tabRegister').classList.toggle('active', mode === 'register');
+            document.getElementById('registerFields').style.display = mode === 'register' ? 'block' : 'none';
+            document.getElementById('authSubmitBtn').innerText = mode === 'login' ? 'Initialize Terminal Connection' : 'Register Core Brokerage Account';
+        }
+
+        function handleAuthentication() {
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            
+            if(!email || !password) return alert('Please input your credential profile mapping details.');
+            
+            if(operationalMode === 'register') {
+                const requestedUser = document.getElementById('authUsername').value;
+                document.getElementById('username').value = requestedUser;
+            }
+
+            // Successfully clear modal layer out of visibility field
+            document.getElementById('authOverlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('authOverlay').style.display = 'none';
+                updateDashboard();
+            }, 300);
+        }
+
         // High-performance HTML5 canvas engine rendering realistic financial candlesticks
         function drawCandlesticks() {
             const canvas = document.getElementById('candlestickCanvas');
             if(!canvas) return;
             const ctx = canvas.getContext('2d');
             
-            // Auto layout dimensions
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Dummy market model data blocks: Open, High, Low, Close
             const candles = [
                 { o: 92, h: 98, l: 90, c: 96 },
                 { o: 96, h: 103, l: 94, c: 101 },
@@ -512,7 +645,6 @@
                 const x = (index * spacing) + (spacing * 0.2);
                 const isGreen = candle.c >= candle.o;
                 
-                // Map metrics to drawing scale pixels inverse height mappings
                 const yOpen = canvas.height - (candle.o * 1.2);
                 const yClose = canvas.height - (candle.c * 1.2);
                 const yHigh = canvas.height - (candle.h * 1.2);
@@ -522,25 +654,21 @@
                 ctx.fillStyle = isGreen ? '#00a86b' : '#dc3545';
                 ctx.lineWidth = 2;
                 
-                // Render wick strings
                 ctx.beginPath();
                 ctx.moveTo(x + candleWidth / 2, yHigh);
                 ctx.lineTo(x + candleWidth / 2, yLow);
                 ctx.stroke();
                 
-                // Render volume blocks
                 ctx.fillRect(x, Math.min(yOpen, yClose), candleWidth, Math.abs(yOpen - yClose));
             });
         }
 
-        // KYC compliance form processing
         function submitVerification() {
             const fileInput = document.getElementById('kycFileInput');
             if(!fileInput.files.length) {
                 return alert('Please choose a valid ID document file to submit.');
             }
             
-            // Trigger visual UI update
             document.getElementById('kycStatusLabel').innerText = "VERIFICATION UNDER REVIEW";
             document.getElementById('kycStatusLabel').style.background = "#0b5ed7";
             document.getElementById('kycBanner').style.background = "rgba(11, 94, 215, 0.08)";
@@ -560,7 +688,6 @@
             document.getElementById('asset-bal').innerText = `${data.balances.ASSET.toFixed(4)} UNITS`;
             document.getElementById('market-price').innerText = `$${data.currentMarketPrice.toFixed(2)}`;
             
-            // Redraw charting element configuration dynamically
             drawCandlesticks();
         }
 
@@ -607,9 +734,8 @@
             updateDashboard();
         }
 
-        // Run Initial State Core Bindings
         window.onload = () => {
-            updateDashboard();
+            drawCandlesticks();
         };
     </script>
 </body>
