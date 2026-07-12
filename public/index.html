@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>traderscheme.com | Institutional Trading Desk</title>
+    <title>traderscheme.com | Multi-Asset Brokerage Terminal</title>
     <style>
         :root {
-            --bg-main: #f1f5f9;        /* Softened anti-glare premium gray background */
-            --bg-card: #ffffff;        /* Pure white for panels */
-            --bg-input: #f8fafc;       /* Muted off-white for input fields */
-            --primary: #00a86b;        /* Professional premium green */
-            --primary-hover: #008f5a;  /* Hover button green */
-            --danger: #dc3545;         /* Crisp red for shorting/selling */
-            --text-main: #0f172a;      /* Deep slate main typography */
-            --text-muted: #64748b;     /* Slate gray secondary text */
-            --border-color: #e2e8f0;   /* Light minimalist border lines */
-            --warning: #f59e0b;        /* Alert gold for pending validation */
+            --bg-main: #f1f5f9;        /* Soft anti-glare premium gray */
+            --bg-card: #ffffff;        /* Pure white panels */
+            --bg-input: #f8fafc;       /* Off-white form controls */
+            --primary: #00a86b;        /* Institutional green */
+            --primary-hover: #008f5a;  
+            --danger: #dc3545;         
+            --text-main: #0f172a;      /* Deep slate typography */
+            --text-muted: #64748b;     
+            --border-color: #e2e8f0;   
+            --warning: #f59e0b;        
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background: var(--bg-main);
             color: var(--text-main);
             padding: 0;
@@ -27,79 +27,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Authentication Portal Modal Overlay */
-        .auth-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(8px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            transition: opacity 0.3s ease;
-        }
-
-        .auth-card {
-            background: var(--bg-card);
-            border-radius: 12px;
-            width: 100%;
-            max-width: 400px;
-            padding: 32px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            box-sizing: border-box;
-        }
-
-        .auth-header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
-        .auth-logo {
-            width: 42px;
-            height: 42px;
-            fill: var(--primary);
-            margin-bottom: 12px;
-        }
-
-        .auth-title {
-            font-size: 22px;
-            font-weight: 700;
-            margin: 0;
-        }
-
-        .auth-subtitle {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-
-        .auth-tabs {
-            display: flex;
-            border-bottom: 2px solid var(--border-color);
-            margin-bottom: 20px;
-        }
-
-        .auth-tab {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            color: var(--text-muted);
-        }
-
-        .auth-tab.active {
-            color: var(--primary);
-            border-bottom: 2px solid var(--primary);
-            margin-bottom: -2px;
-        }
-
-        /* Professional Header bar with Logo */
+        /* Top Header Navigation Matrix */
         .navbar {
             background: var(--bg-card);
             padding: 14px 24px;
@@ -125,7 +53,6 @@
         .brand {
             font-size: 19px;
             font-weight: 700;
-            color: var(--text-main);
             letter-spacing: -0.5px;
         }
 
@@ -133,25 +60,12 @@
             color: var(--primary);
         }
 
-        .secure-badge {
+        .nav-actions {
             display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-muted);
-            background: #f1f5f9;
-            padding: 6px 12px;
-            border-radius: 6px;
+            gap: 12px;
         }
 
-        .secure-icon {
-            width: 12px;
-            height: 12px;
-            fill: var(--text-muted);
-        }
-
-        /* Sub-Header Network Banner */
+        /* Live Infrastructure Network Status */
         .network-banner {
             background: #ffffff;
             border-bottom: 1px solid var(--border-color);
@@ -185,51 +99,42 @@
             100% { transform: scale(0.9); opacity: 0.6; }
         }
 
-        /* Identity Verification KYC Alert Strip */
-        .kyc-strip {
-            background: rgba(245, 158, 11, 0.08);
-            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
-            padding: 10px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            font-weight: 500;
-            color: #b45309;
-        }
-
-        .kyc-badge {
-            background: var(--warning);
-            color: #ffffff;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        /* Layout Architecture */
-        .container {
+        /* Step Architecture Application Containers */
+        .app-stage {
+            display: none; /* Controlled dynamically via JavaScript states */
             max-width: 1100px;
             margin: 24px auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
             padding: 0 16px;
         }
 
+        .active-stage {
+            display: block;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
         @media (max-width: 768px) {
-            .container {
+            .grid-layout {
                 grid-template-columns: 1fr;
             }
         }
 
-        /* Premium Minimalist Cards */
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            padding: 24px;
+            padding: 28px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+            box-sizing: border-box;
+        }
+
+        .auth-centered-card {
+            max-width: 450px;
+            margin: 40px auto;
         }
 
         .full-width {
@@ -241,7 +146,6 @@
             margin-bottom: 20px;
             font-size: 14px;
             font-weight: 700;
-            color: var(--text-main);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             display: flex;
@@ -249,12 +153,45 @@
             gap: 8px;
         }
 
-        /* Wallet Row Metrics Block */
+        /* Dynamic Crypto Wallet Elements */
+        .wallet-container {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .wallet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #94a3b8;
+        }
+
+        .wallet-crypto-addr {
+            font-family: monospace;
+            background: rgba(255,255,255,0.1);
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-top: 8px;
+            word-break: break-all;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 16px;
-            margin-bottom: 8px;
+            margin-bottom: 20px;
         }
 
         .metric-box {
@@ -267,66 +204,28 @@
             background: #fafbfc;
         }
 
-        .metric-icon-wrapper {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(0, 168, 107, 0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .metric-icon-wrapper.blue-theme {
-            background: rgba(11, 94, 215, 0.08);
-        }
-
-        .metric-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .metric-label {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
         .metric-value {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
-            color: var(--text-main);
         }
 
-        /* Active Candlestick Chart Display Panel */
+        /* Candlestick Graphic Engine Panel */
         .chart-container {
             border: 1px solid var(--border-color);
             border-radius: 6px;
             padding: 16px;
-            margin-top: 16px;
             background: #ffffff;
-        }
-
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
         }
 
         #candlestickCanvas {
             width: 100%;
-            height: 180px;
+            height: 200px;
             background: #fafbfc;
             border-radius: 4px;
             border: 1px solid #f1f5f9;
         }
 
-        /* Form Layout Elements */
+        /* Form Controls */
         label {
             display: block;
             font-size: 12px;
@@ -346,7 +245,6 @@
             box-sizing: border-box;
             font-size: 14px;
             font-weight: 500;
-            transition: border-color 0.15s ease;
         }
 
         input:focus, select:focus {
@@ -355,287 +253,283 @@
             box-shadow: 0 0 0 3px rgba(0, 168, 107, 0.08);
         }
 
-        /* Clean Functional Buttons */
+        /* Structural Button UI Layouts */
         button {
-            width: 100%;
-            padding: 14px;
+            padding: 12px 20px;
             border-radius: 6px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             border: none;
             cursor: pointer;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
-            transition: background 0.15s ease, transform 0.1s ease;
+            transition: all 0.15s ease;
         }
 
-        button:active {
-            transform: scale(0.99);
-        }
-
-        .btn-green {
-            background: var(--primary);
-            color: #ffffff;
-        }
-
-        .btn-green:hover {
-            background: var(--primary-hover);
-        }
-
-        .btn-outline {
-            background: #ffffff;
-            color: var(--text-main);
-            border: 1px solid #cbd5e1;
-        }
-
-        .btn-outline:hover {
-            background: #f8fafc;
-            border-color: #94a3b8;
-        }
+        .btn-green { background: var(--primary); color: #ffffff; }
+        .btn-green:hover { background: var(--primary-hover); }
+        .btn-outline { background: #ffffff; color: var(--text-main); border: 1px solid #cbd5e1; }
+        .btn-outline:hover { background: #f8fafc; border-color: #94a3b8; }
+        .btn-full { width: 100%; padding: 14px; }
     </style>
 </head>
 <body>
 
-    <!-- Dynamic Authentication Portal Layer -->
-    <div class="auth-overlay" id="authOverlay">
-        <div class="auth-card">
-            <div class="auth-header">
-                <svg class="auth-logo" viewBox="0 0 24 24">
-                    <path d="M3.5 18.5l6-6 4 4L22 6.5l-1.41-1.42-7.09 7.09-4-4-7.5 7.5L3.5 18.5z"/>
-                </svg>
-                <h1 class="auth-title">Welcome to traderscheme</h1>
-                <p class="auth-subtitle">Secure Multi-Asset Brokerage Node</p>
-            </div>
-
-            <div class="auth-tabs">
-                <div class="auth-tab active" id="tabLogin" onclick="switchAuthMode('login')">Sign In</div>
-                <div class="auth-tab" id="tabRegister" onclick="switchAuthMode('register')">Create Account</div>
-            </div>
-
-            <!-- Multi-State Auth Forms -->
-            <div id="authFormBody">
-                <label for="authEmail">Secure Email Address</label>
-                <input type="email" id="authEmail" placeholder="name@example.com">
-
-                <label for="authPassword">Secret Security Password</label>
-                <input type="password" id="authPassword" placeholder="••••••••">
-
-                <div id="registerFields" style="display: none;">
-                    <label for="authUsername">Operator Identifier Tag</label>
-                    <input type="text" id="authUsername" value="trader1">
-                </div>
-
-                <button class="btn-green" style="margin-top: 8px;" onclick="handleAuthentication()" id="authSubmitBtn">Initialize Terminal Connection</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Professional Navbar Block -->
+    <!-- Global Top Nav Bar -->
     <div class="navbar">
-        <div class="brand-container">
+        <div class="brand-container" onclick="showStage('landing')" style="cursor:pointer;">
             <svg class="brand-logo" viewBox="0 0 24 24">
                 <path d="M3.5 18.5l6-6 4 4L22 6.5l-1.41-1.42-7.09 7.09-4-4-7.5 7.5L3.5 18.5z"/>
             </svg>
             <div class="brand">trader<span>scheme</span></div>
         </div>
         
-        <div class="secure-badge">
-            <svg class="secure-icon" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-            SECURE SERVER
+        <!-- Action items pinned to the Top Right -->
+        <div class="nav-actions" id="navAuthActions">
+            <button class="btn-outline" onclick="showStage('login')">Sign In</button>
+            <button class="btn-green" onclick="showStage('register')">Create Account</button>
         </div>
     </div>
 
-    <!-- Live Infrastructure Status Ribbon Bar -->
+    <!-- Live Status Banner -->
     <div class="network-banner">
         <div class="status-indicator">
             <div class="pulse-dot"></div>
-            LIVE CORE CONNECTED
+            LIVE MARKET CONNECTIVITY ESTABLISHED
         </div>
-        <div>UTC TERMINAL FEED ACTIVE</div>
+        <div id="terminalUserTag">GUEST MODE</div>
     </div>
 
-    <!-- Real-Time KYC Security Notification Strip -->
-    <div class="kyc-strip" id="kycBanner">
-        <div>⚠️ Account Node Restriction: Please update your Legal Identity Credentials to clear payout validation delays.</div>
-        <div class="kyc-badge" id="kycStatusLabel">PENDING ID UPLOAD</div>
+    <!-- STAGE 1: Public Dashboard Landing Screen -->
+    <div id="stage-landing" class="app-stage active-stage">
+        <div style="max-width:800px; margin: 40px auto; text-align:center;">
+            <h1 style="font-size:36px; font-weight:800; letter-spacing:-1px; margin-bottom:12px;">Institutional Multi-Asset Retail Desk</h1>
+            <p style="color:var(--text-muted); font-size:16px; margin-bottom:32px;">Execute live spot contracts, track indexes, and settle directly to secure cryptographic wallets.</p>
+        </div>
+        
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; margin-bottom:12px; align-items:center;">
+                <h2><span style="color:var(--primary);">●</span> Index Spot Reference Feed</h2>
+                <strong style="font-size:16px;" id="landing-price">$100.00</strong>
+            </div>
+            <canvas id="candlestickCanvasLanding" height="200" style="width:100%; background:#fafbfc; border-radius:6px; border:1px solid #f1f5f9;"></canvas>
+            <div style="margin-top:20px; text-align:center;">
+                <button class="btn-green" style="padding:14px 40px;" onclick="showStage('register')">Get Started - Setup Wallet</button>
+            </div>
+        </div>
     </div>
 
-    <div class="container">
-        
-        <!-- Verification Gateway Module (KYC Upload Engine) -->
-        <div class="card full-width">
-            <h2>
-                <svg style="width:16px;height:16px;fill:var(--warning);" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                Identity Verification & Account Compliance Gateway
-            </h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                <div>
-                    <label>Government-Issued Document Category</label>
-                    <select id="kycDocType">
-                        <option value="passport">International Travel Passport</option>
-                        <option value="national_id">National ID Card / Drivers Permit</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Upload Document File Reference</label>
-                    <input type="file" id="kycFileInput" accept="image/*,application/pdf" style="padding: 8px;">
-                </div>
-            </div>
-            <button class="btn-outline" style="border-color: var(--warning); color: #b45309;" onclick="submitVerification()">Submit Compliance Documents</button>
-        </div>
-        
-        <!-- Account Overview Panel Section -->
-        <div class="card full-width">
-            <h2>
-                <svg style="width:16px;height:16px;fill:var(--text-main);" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H5v-2h9v2zm3-4H5v-2h12v2zm0-4H5V7h12v2z"/></svg>
-                Trading Desk Terminal Overview
-            </h2>
+    <!-- STAGE 2: Core Registration Page -->
+    <div id="stage-register" class="app-stage">
+        <div class="card auth-centered-card">
+            <h2>Create Institutional Account</h2>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:-10px; margin-bottom:20px;">Open an audited account routing profile.</p>
             
-            <label for="username">Operator Credentials Identification</label>
-            <input type="text" id="username" value="trader1" onchange="updateDashboard()">
+            <label for="regUser">Choose Unique Username</label>
+            <input type="text" id="regUser" value="trader1">
+
+            <label for="regEmail">Secure Email Address</label>
+            <input type="email" id="regEmail" placeholder="name@example.com">
+
+            <label for="regPass">Account Security Password</label>
+            <input type="password" id="regPass" placeholder="••••••••">
+
+            <button class="btn-green btn-full" onclick="handleRegistrationSubmit()">Proceed to Verification Gateway</button>
+        </div>
+    </div>
+
+    <!-- STAGE 2 ALTERNATE: Sign In Screen -->
+    <div id="stage-login" class="app-stage">
+        <div class="card auth-centered-card">
+            <h2>Sign In to Core Node</h2>
+            <label for="loginEmail">Email Address</label>
+            <input type="email" id="loginEmail" placeholder="name@example.com">
+            <label for="loginPass">Password</label>
+            <input type="password" id="loginPass" placeholder="••••••••">
+            <button class="btn-green btn-full" onclick="bypassToTradingDesk()">Initialize Terminal Connection</button>
+        </div>
+    </div>
+
+    <!-- STAGE 3: Identity Verification (KYC) Gateway -->
+    <div id="stage-verification" class="app-stage">
+        <div class="card auth-centered-card" style="max-width:550px;">
+            <div style="text-align:center; margin-bottom:20px;">
+                <span style="background:rgba(245, 158, 11, 0.1); padding:10px; border-radius:50%; display:inline-block; margin-bottom:10px;">
+                    <svg style="width:24px; height:24px; fill:var(--warning);" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                </span>
+                <h3 style="margin:0; font-size:18px;">Account Clearance & Identity Verification</h3>
+                <p style="font-size:13px; color:var(--text-muted); margin:4px 0 0 0;">Compliance document confirmation is required before trading terminal configuration.</p>
+            </div>
             
-            <div class="metrics-grid">
-                <div class="metric-box">
-                    <div class="metric-icon-wrapper">
-                        <svg style="fill:var(--primary);" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-                    </div>
-                    <div class="metric-info">
-                        <span class="metric-label">USD Wallet Ledger Balance</span>
-                        <span id="usd-bal" class="metric-value" style="color: var(--primary);">$0.00</span>
-                    </div>
-                </div>
-
-                <div class="metric-box">
-                    <div class="metric-icon-wrapper blue-theme">
-                        <svg style="fill:#0b5ed7;" viewBox="0 0 24 24"><path d="M12 2L1 7l11 5 9-4.09V17h2V7L12 2zm0 13l-9-4.09V15l9 4.09 8-3.64v-4.18L12 15z"/></svg>
-                    </div>
-                    <div class="metric-info">
-                        <span class="metric-label">Allocated Capital Portfolio</span>
-                        <span id="asset-bal" class="metric-value" style="color: #0b5ed7;">0.0000 UNITS</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Candlestick Graphic Engine Block -->
-            <div class="chart-container">
-                <div class="chart-header">
-                    <span>Index Spot Reference Price: <strong id="market-price" style="color:var(--text-main); font-size:13px;">$100.00</strong></span>
-                    <span style="color: var(--primary); font-weight:600;">● DYNAMIC CANDLESTICK FEED</span>
-                </div>
-                <canvas id="candlestickCanvas" width="800" height="180"></canvas>
-            </div>
-        </div>
-
-        <!-- System Execution Form Engine Desk -->
-        <div class="card full-width">
-            <h2>
-                <svg style="width:16px;height:16px;fill:var(--text-main);" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
-                Order Execution Terminal Routing
-            </h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                <div>
-                    <label>Order Target Action</label>
-                    <select id="trade-side">
-                        <option value="BUY">BUY / POSITION LONG</option>
-                        <option value="SELL">SELL / POSITION SHORT</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Order Size Allocation (Units)</label>
-                    <input type="number" id="trade-qty" placeholder="0">
-                </div>
-            </div>
-            <button class="btn-green" onclick="handleTrade()">Transmit Orders Routing</button>
-        </div>
-
-        <!-- Cashier Segment: Money Deposit System -->
-        <div class="card">
-            <h2>
-                <svg style="width:16px;height:16px;fill:var(--text-main);" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                Cashier Terminal | Deposit
-            </h2>
-            <label>Payment Gateway Node Network</label>
-            <select>
-                <option value="usdt">Tether USD (USDT-TRC20 Network)</option>
-                <option value="btc">Bitcoin Secure Mainnet (BTC)</option>
-                <option value="fiat">Instant Credit Settlement Node</option>
+            <label>Government-Issued Identification Category</label>
+            <select id="kycType">
+                <option value="passport">International Passport Document</option>
+                <option value="national_id">National ID Card / Driver License</option>
             </select>
-            <label>Amount to Fund Allocation ($)</label>
-            <input type="number" id="deposit-amount" placeholder="0.00">
-            <button class="btn-green" onclick="handleDeposit()">Execute Secure Funding</button>
-        </div>
 
-        <!-- Cashier Segment: Money Withdrawal System -->
-        <div class="card">
-            <h2>
-                <svg style="width:16px;height:16px;fill:var(--text-main);" viewBox="0 0 24 24"><path d="M5 9h4v6H9v6h6v-6h4l-7-7-7 7zm14 9v2H5v-2h14z"/></svg>
-                Cashier Terminal | Withdrawal
-            </h2>
-            <label>Payout Payout Destination Portal</label>
-            <select id="withdraw-method">
-                <option value="usdt">Tether USD (USDT-TRC20 Address)</option>
-                <option value="btc">Bitcoin Personal Address Ledger</option>
-                <option value="wire">Direct Institutional Bank Wire</option>
-            </select>
-            <label>Withdrawal Clearance Quantity ($)</label>
-            <input type="number" id="withdraw-amount" placeholder="0.00">
-            <button class="btn-outline" onclick="handleWithdrawal()">Transmit Settlement Release</button>
+            <label>Upload High-Resolution Scan Reference</label>
+            <input type="file" id="kycFile" accept="image/*,application/pdf" style="padding:8px;">
+
+            <button class="btn-green btn-full" onclick="handleVerificationSubmit()">Submit Audit Files & Open Trading Desk</button>
+        </div>
+    </div>
+
+    <!-- STAGE 4: Final Locked Core Trading Terminal Layout -->
+    <div id="stage-trading" class="app-stage">
+        <div class="grid-layout">
+            
+            <!-- Complete Dynamic Crypto Wallet Infrastructure Panel -->
+            <div class="card full-width">
+                <div class="wallet-container">
+                    <div class="wallet-header">
+                        <span>🔒 Secure Multi-Asset Crypto Wallet Vault</span>
+                        <span style="color:#4cd137; font-weight:bold;">● Active Connection</span>
+                    </div>
+                    <div style="font-size:28px; font-weight:800; margin:14px 0 4px 0;" id="walletCryptoBalance">0.00 USDT</div>
+                    <div class="wallet-crypto-addr">
+                        <span id="cryptoAddressString">Deposit Address: loading security ledger...</span>
+                        <span style="color:var(--primary); font-size:10px; cursor:pointer;" onclick="alert('Address copied to system buffer')">COPY</span>
+                    </div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-box">
+                        <div style="width:40px; height:40px; border-radius:50%; background:rgba(0, 168, 107, 0.08); display:flex; align-items:center; justify-content:center;">
+                            <svg style="width:20px; height:20px; fill:var(--primary);" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size:11px; font-weight:600; color:var(--text-muted); text-transform:uppercase;">Available Settled Cash</div>
+                            <div id="usd-bal" class="metric-value" style="color:var(--primary);">$0.00</div>
+                        </div>
+                    </div>
+                    <div class="metric-box">
+                        <div style="width:40px; height:40px; border-radius:50%; background:rgba(11, 94, 215, 0.08); display:flex; align-items:center; justify-content:center;">
+                            <svg style="width:20px; height:20px; fill:#0b5ed7;" viewBox="0 0 24 24"><path d="M12 2L1 7l11 5 9-4.09V17h2V7L12 2zm0 13l-9-4.09V15l9 4.09 8-3.64v-4.18L12 15z"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size:11px; font-weight:600; color:var(--text-muted); text-transform:uppercase;">Position Asset Allocation</div>
+                            <div id="asset-bal" class="metric-value" style="color:#0b5ed7;">0.0000 UNITS</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Candlestick Component -->
+                <div class="chart-container">
+                    <div style="display:flex; justify-content:between; font-size:12px; margin-bottom:10px; color:var(--text-muted);">
+                        <span>Index Spot Contract Value: <strong id="market-price" style="color:var(--text-main);">$100.00</strong></span>
+                        <span style="color:var(--primary); font-weight:700;">● STREAM FEED STABLE</span>
+                    </div>
+                    <canvas id="candlestickCanvasTrading" height="180"></canvas>
+                </div>
+            </div>
+
+            <!-- Trade Execution Panel Routing -->
+            <div class="card full-width">
+                <h2>Order Routing Transmission Desk</h2>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                    <div>
+                        <label>Target Execution Framework</label>
+                        <select id="trade-side">
+                            <option value="BUY">BUY / LONG CONTRACT</option>
+                            <option value="SELL">SELL / SHORT CONTRACT</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Order Target Volume (Units)</label>
+                        <input type="number" id="trade-qty" placeholder="0">
+                    </div>
+                </div>
+                <button class="btn-green btn-full" onclick="handleTrade()">Transmit Orders to Mainnet</button>
+            </div>
+
+            <!-- Funding Deposit Area -->
+            <div class="card">
+                <h2>Cashier Node | Fund Allocation</h2>
+                <label>Deposit Infrastructure Inflow Network</label>
+                <select id="depositNetwork">
+                    <option value="usdt">Tether USD (USDT TRC20 Address)</option>
+                    <option value="btc">Bitcoin Secure Mainnet Node</option>
+                </select>
+                <label>Value Liquidity Amount ($)</label>
+                <input type="number" id="deposit-amount" placeholder="0.00">
+                <button class="btn-green btn-full" onclick="handleDeposit()">Settle Inflow Deposit</button>
+            </div>
+
+            <!-- Settlement Withdrawal Area -->
+            <div class="card">
+                <h2>Cashier Node | Withdraw Liquidity</h2>
+                <label>Target Outflow Vault Destination</label>
+                <select>
+                    <option value="usdt">External TRC20 Wallet Address Target</option>
+                    <option value="btc">External Bitcoin Core Key Target</option>
+                </select>
+                <label>Settlement Release Outflow Amount ($)</label>
+                <input type="number" id="withdraw-amount" placeholder="0.00">
+                <button class="btn-outline btn-full" onclick="handleWithdrawal()">Release Vault Settlement</button>
+            </div>
+
         </div>
     </div>
 
     <script>
-        let operationalMode = "login";
-
-        function switchAuthMode(mode) {
-            operationalMode = mode;
-            document.getElementById('tabLogin').classList.toggle('active', mode === 'login');
-            document.getElementById('tabRegister').classList.toggle('active', mode === 'register');
-            document.getElementById('registerFields').style.display = mode === 'register' ? 'block' : 'none';
-            document.getElementById('authSubmitBtn').innerText = mode === 'login' ? 'Initialize Terminal Connection' : 'Register Core Brokerage Account';
+        // Central Routing System to Toggle Pages smoothly
+        function showStage(stageId) {
+            document.querySelectorAll('.app-stage').forEach(el => el.classList.remove('active-stage'));
+            document.getElementById('stage-' + stageId).classList.add('active-stage');
+            
+            // Re-render chart engines based on what window is current
+            if (stageId === 'landing') drawCandlesticks('candlestickCanvasLanding');
+            if (stageId === 'trading') drawCandlesticks('candlestickCanvasTrading');
         }
 
-        function handleAuthentication() {
-            const email = document.getElementById('authEmail').value;
-            const password = document.getElementById('authPassword').value;
-            
-            if(!email || !password) return alert('Please input your credential profile mapping details.');
-            
-            if(operationalMode === 'register') {
-                const requestedUser = document.getElementById('authUsername').value;
-                document.getElementById('username').value = requestedUser;
-            }
-
-            // Successfully clear modal layer out of visibility field
-            document.getElementById('authOverlay').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('authOverlay').style.display = 'none';
-                updateDashboard();
-            }, 300);
+        // Action Handlers
+        function handleRegistrationSubmit() {
+            const userVal = document.getElementById('regUser').value;
+            if(!userVal) return alert('Provide a valid operator username identity tag.');
+            showStage('verification');
         }
 
-        // High-performance HTML5 canvas engine rendering realistic financial candlesticks
-        function drawCandlesticks() {
-            const canvas = document.getElementById('candlestickCanvas');
+        function handleVerificationSubmit() {
+            const fileCheck = document.getElementById('kycFile');
+            if(!fileCheck.files.length) return alert('Compliance framework requires identity file documentation.');
+            
+            // Configure layout metrics dynamically 
+            const activeUser = document.getElementById('regUser').value || 'trader1';
+            document.getElementById('terminalUserTag').innerText = "OPERATOR: " + activeUser.toUpperCase();
+            document.getElementById('cryptoAddressString').innerText = "Deposit Address: TX_" + Math.random().toString(36).substring(2, 10).toUpperCase() + "77xM9qN2B";
+            
+            // Wipe public auth control fields out of view
+            document.getElementById('navAuthActions').innerHTML = `<button class="btn-outline" onclick="window.location.reload()">Disconnect Node</button>`;
+            
+            alert('Identity credentials verified. Initializing secure hardware crypto wallet pipelines.');
+            showStage('trading');
+            updateDashboard();
+        }
+
+        function bypassToTradingDesk() {
+            document.getElementById('terminalUserTag').innerText = "OPERATOR: TRADER1";
+            document.getElementById('cryptoAddressString').innerText = "Deposit Address: TX_R3AD79K88xM9qN2B";
+            document.getElementById('navAuthActions').innerHTML = `<button class="btn-outline" onclick="window.location.reload()">Disconnect Node</button>`;
+            showStage('trading');
+            updateDashboard();
+        }
+
+        // Standard Candlestick Rendering Engine
+        function drawCandlesticks(canvasId) {
+            const canvas = document.getElementById(canvasId);
             if(!canvas) return;
             const ctx = canvas.getContext('2d');
-            
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             const candles = [
-                { o: 92, h: 98, l: 90, c: 96 },
-                { o: 96, h: 103, l: 94, c: 101 },
-                { o: 101, h: 102, l: 93, c: 95 },
-                { o: 95, h: 104, l: 94, c: 102 },
-                { o: 102, h: 112, l: 100, c: 110 },
-                { o: 110, h: 111, l: 102, c: 104 },
-                { o: 104, h: 107, l: 99, c: 101 },
-                { o: 101, h: 115, l: 100, c: 112 },
-                { o: 112, h: 122, l: 110, c: 118 },
-                { o: 118, h: 120, l: 111, c: 114 },
-                { o: 114, h: 125, l: 113, c: 123 },
-                { o: 123, h: 124, l: 116, c: 119 }
+                { o: 92, h: 98, l: 90, c: 96 }, { o: 96, h: 103, l: 94, c: 101 },
+                { o: 101, h: 102, l: 93, c: 95 }, { o: 95, h: 104, l: 94, c: 102 },
+                { o: 102, h: 112, l: 100, c: 110 }, { o: 110, h: 111, l: 102, c: 104 },
+                { o: 104, h: 107, l: 99, c: 101 }, { o: 101, h: 115, l: 100, c: 112 },
+                { o: 112, h: 122, l: 110, c: 118 }, { o: 118, h: 120, l: 111, c: 114 },
+                { o: 114, h: 125, l: 113, c: 123 }, { o: 123, h: 124, l: 116, c: 119 }
             ];
             
             const spacing = canvas.width / candles.length;
@@ -644,7 +538,6 @@
             candles.forEach((candle, index) => {
                 const x = (index * spacing) + (spacing * 0.2);
                 const isGreen = candle.c >= candle.o;
-                
                 const yOpen = canvas.height - (candle.o * 1.2);
                 const yClose = canvas.height - (candle.c * 1.2);
                 const yHigh = canvas.height - (candle.h * 1.2);
@@ -658,84 +551,79 @@
                 ctx.moveTo(x + candleWidth / 2, yHigh);
                 ctx.lineTo(x + candleWidth / 2, yLow);
                 ctx.stroke();
-                
                 ctx.fillRect(x, Math.min(yOpen, yClose), candleWidth, Math.abs(yOpen - yClose));
             });
         }
 
-        function submitVerification() {
-            const fileInput = document.getElementById('kycFileInput');
-            if(!fileInput.files.length) {
-                return alert('Please choose a valid ID document file to submit.');
-            }
-            
-            document.getElementById('kycStatusLabel').innerText = "VERIFICATION UNDER REVIEW";
-            document.getElementById('kycStatusLabel').style.background = "#0b5ed7";
-            document.getElementById('kycBanner').style.background = "rgba(11, 94, 215, 0.08)";
-            document.getElementById('kycBanner').style.color = "#0b5ed7";
-            document.getElementById('kycBanner').innerText = "✅ Documents Received: Identity analysis validation module currently processing pipeline records.";
-            
-            alert('Identity verification documents securely encrypted and submitted to risk framework routing panels.');
-        }
-
+        // API Infrastructure Bindings
         async function updateDashboard() {
-            const username = document.getElementById('username').value;
-            const res = await fetch(`/api/user/${username}`);
+            const userTarget = document.getElementById('regUser').value || 'trader1';
+            const res = await fetch(`/api/user/${userTarget}`);
             const data = await res.json();
             
-            const formattedUSD = `$${data.balances.USD.toFixed(2)}`;
-            document.getElementById('usd-bal').innerText = formattedUSD;
+            // Map parameters into interface bindings
+            document.getElementById('usd-bal').innerText = `$${data.balances.USD.toFixed(2)}`;
+            document.getElementById('walletCryptoBalance').innerText = `${data.balances.USD.toFixed(2)} USDT`;
             document.getElementById('asset-bal').innerText = `${data.balances.ASSET.toFixed(4)} UNITS`;
-            document.getElementById('market-price').innerText = `$${data.currentMarketPrice.toFixed(2)}`;
             
-            drawCandlesticks();
+            const priceString = `$${data.currentMarketPrice.toFixed(2)}`;
+            if(document.getElementById('market-price')) document.getElementById('market-price').innerText = priceString;
+            if(document.getElementById('landing-price')) document.getElementById('landing-price').innerText = priceString;
+            
+            drawCandlesticks('candlestickCanvasTrading');
         }
 
         async function handleDeposit() {
-            const username = document.getElementById('username').value;
+            const userTarget = document.getElementById('regUser').value || 'trader1';
             const amount = document.getElementById('deposit-amount').value;
-            if(!amount || amount <= 0) return alert('Please supply a valid funding amount');
+            if(!amount || amount <= 0) return alert('Supply a valid ledger asset calculation size.');
 
             await fetch('/api/deposit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, amount })
+                body: JSON.stringify({ username: userTarget, amount })
             });
             document.getElementById('deposit-amount').value = '';
             updateDashboard();
         }
 
         async function handleWithdrawal() {
-            const username = document.getElementById('username').value;
+            const userTarget = document.getElementById('regUser').value || 'trader1';
             const amount = document.getElementById('withdraw-amount').value;
-            if(!amount || amount <= 0) return alert('Please supply a valid withdrawal quantity');
+            if(!amount || amount <= 0) return alert('Supply a valid clearance outflow calculation size.');
             
             await fetch('/api/deposit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, amount: -Math.abs(amount) })
+                body: JSON.stringify({ username: userTarget, amount: -Math.abs(amount) })
             });
             document.getElementById('withdraw-amount').value = '';
             updateDashboard();
         }
 
         async function handleTrade() {
-            const username = document.getElementById('username').value;
+            const userTarget = document.getElementById('regUser').value || 'trader1';
             const side = document.getElementById('trade-side').value;
             const quantity = document.getElementById('trade-qty').value;
-            if(!quantity || quantity <= 0) return alert('Please specify a valid transaction volume size');
+            if(!quantity || quantity <= 0) return alert('Specify a valid routing trade block quantity.');
 
             await fetch('/api/trade', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, side, quantity })
+                body: JSON.stringify({ username: userTarget, side, quantity })
             });
             document.getElementById('trade-qty').value = '';
             updateDashboard();
         }
 
+        // Initialize Core Component Rendering State on Boot
         window.onload = () => {
-            drawCandlesticks();
+            drawCandlesticks('candlestickCanvasLanding');
+            // Check current price data from back-end server engine if running
+            fetch('/api/user/trader1').then(r => r.json()).then(data => {
+                const priceVal = `$${data.currentMarketPrice.toFixed(2)}`;
+                document.getElementById('landing-price').innerText = priceVal;
+            }).catch(() => {});
         };
     </script>
 </body>
