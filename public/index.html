@@ -201,7 +201,7 @@
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 20px;
             margin-bottom: 24px;
-            }
+        }
 
         .metric-box {
             border: 1px solid var(--border-color);
@@ -259,34 +259,39 @@
             background: #1f2a3d;
         }
 
-        /* Password Wrapper for Absolute Floating Action Input Elements */
+        /* Password Input Area Container */
         .password-container {
             position: relative;
             width: 100%;
         }
 
         .password-container input {
-            padding-right: 85px; /* Leave visual buffer space for the see button */
+            padding-right: 50px; 
         }
 
         .toggle-password {
             position: absolute;
             right: 14px;
-            top: 14px;
+            top: 13px;
             background: transparent;
             border: none;
-            color: var(--primary);
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
             cursor: pointer;
-            box-shadow: none;
             padding: 0;
             z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .toggle-password:hover {
-            color: var(--text-main);
-            box-shadow: none;
+
+        .toggle-password svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text-muted);
+            transition: fill 0.2s ease;
+        }
+
+        .toggle-password:hover svg {
+            fill: var(--primary);
         }
 
         /* Structural Button Framework */
@@ -390,16 +395,37 @@
             <label for="regPass">Security Core Password</label>
             <div class="password-container">
                 <input type="password" id="regPass" placeholder="••••••••">
-                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPass', this)">See</button>
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPass', this)">
+                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                </button>
             </div>
 
             <label for="regPassConfirm">Confirm Core Password</label>
             <div class="password-container">
                 <input type="password" id="regPassConfirm" placeholder="••••••••">
-                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPassConfirm', this)">See</button>
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPassConfirm', this)">
+                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                </button>
             </div>
 
             <button class="btn-green btn-full" onclick="handleRegistrationSubmit()">Proceed to Verification Gateway</button>
+        </div>
+    </div>
+
+    <!-- STAGE 2.5: Anti-Scam Secure Email Pin Verification Matrix -->
+    <div id="stage-email-auth" class="app-stage">
+        <div class="card auth-centered-card">
+            <h2>Verify Your Email</h2>
+            <p style="font-size:14px; color:var(--text-muted); margin-top:-14px; margin-bottom:24px;">To protect network architecture from malicious bot setups, an authorization token has been deployed to your address.</p>
+            
+            <div style="background: rgba(245, 124, 0, 0.1); border: 1px solid var(--primary); border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center;">
+                <span style="font-size: 13px; color: var(--text-main);">Mock System Notification: Check <strong id="targetDisplayEmail">your email</strong> for code: <strong style="color:var(--primary); font-size:15px; letter-spacing:1px;">774-902</strong></span>
+            </div>
+
+            <label for="emailOtpCode">Input 6-Digit Verification Pin</label>
+            <input type="text" id="emailOtpCode" placeholder="000000" maxlength="7" style="text-align:center; font-size:18px; font-weight:700; letter-spacing:4px;">
+
+            <button class="btn-green btn-full" onclick="confirmEmailOtpToken()">Verify Email Authenticity</button>
         </div>
     </div>
 
@@ -413,7 +439,9 @@
             <label for="loginPass">Password</label>
             <div class="password-container">
                 <input type="password" id="loginPass" placeholder="••••••••">
-                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('loginPass', this)">See</button>
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('loginPass', this)">
+                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                </button>
             </div>
             
             <button class="btn-green btn-full" onclick="bypassToTradingDesk()">Initialize Terminal Connection</button>
@@ -552,35 +580,51 @@
             if (stageId === 'trading') drawCandlesticks('candlestickCanvasTrading');
         }
 
-        // Live Frontend Password Visibility Controller
+        // Vector Eye Icon Input Controller Matrix
         function togglePasswordVisibility(inputId, buttonEl) {
             const inputField = document.getElementById(inputId);
+            const eyeIconSvg = buttonEl.querySelector('svg');
+            
             if (inputField.type === "password") {
                 inputField.type = "text";
-                buttonEl.innerText = "Hide";
+                // Switch to Slash Eye icon state vector geometry
+                eyeIconSvg.innerHTML = `<path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm11-3c-1.73-4.39-6-7.5-11-7.5S2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>`;
+                eyeIconSvg.style.fill = "var(--primary)";
             } else {
                 inputField.type = "password";
-                buttonEl.innerText = "See";
+                // Return to Open Eye configuration
+                eyeIconSvg.innerHTML = `<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>`;
+                eyeIconSvg.style.fill = "var(--text-muted)";
             }
         }
 
-        // Action Function Submissions Flow
+        // Form Validation submissions handling
         function handleRegistrationSubmit() {
             const userVal = document.getElementById('regUser').value.trim();
             const emailVal = document.getElementById('regEmail').value.trim();
             const passVal = document.getElementById('regPass').value;
             const confirmVal = document.getElementById('regPassConfirm').value;
 
-            // Form completeness checks
             if (!userVal || !emailVal || !passVal || !confirmVal) {
                 return alert('All system identification credentials are required.');
             }
 
-            // Confirm Password Verification Engine
             if (passVal !== confirmVal) {
                 return alert('Security Error: Password fields do not match. Please verify inputs.');
             }
 
+            // Route user credentials directly to anti-scam dashboard hub
+            document.getElementById('targetDisplayEmail').innerText = emailVal;
+            showStage('email-auth');
+        }
+
+        function confirmEmailOtpToken() {
+            const enteredOtp = document.getElementById('emailOtpCode').value.trim().replace('-', '');
+            // System matching security parameter control token
+            if (enteredOtp !== "774902") {
+                return alert('Invalid Account Verification Code Token. Access Denied.');
+            }
+            // Proceed forward to KYC documentation page
             showStage('verification');
         }
 
@@ -591,10 +635,7 @@
             const activeUser = document.getElementById('regUser').value || 'trader1';
             document.getElementById('terminalUserTag').innerText = "OPERATOR: " + activeUser.toUpperCase();
             
-            // Generate a real-looking working Tron-network crypto address for the wallet
             document.getElementById('cryptoAddressString').innerText = "Deposit Address: TY" + Math.random().toString(36).substring(2, 12).toUpperCase() + "x7PqN9";
-            
-            // Clear out high-level navbar links safely
             document.getElementById('navAuthActions').innerHTML = `<button class="btn-outline" onclick="window.location.reload()" style="color:var(--primary); border-color:var(--primary);">Disconnect Node</button>`;
             
             alert('Identity tokens approved. Opening live high-performance crypto wallet terminal structures.');
@@ -616,10 +657,8 @@
             if(!canvas) return;
             const ctx = canvas.getContext('2d');
             
-            // Clear and establish scaling contexts
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // True financial layout dataset
             const candles = [
                 { o: 88, h: 96, l: 85, c: 94 }, { o: 94, h: 104, l: 92, c: 102 },
                 { o: 102, h: 103, l: 91, c: 93 }, { o: 93, h: 106, l: 92, c: 105 },
@@ -636,24 +675,20 @@
                 const x = (index * spacing) + (spacing * 0.18);
                 const isGreen = candle.c >= candle.o;
                 
-                // Scale math to dynamically fit the chart metrics space perfectly
                 const yOpen = canvas.height - (candle.o * 1.3);
                 const yClose = canvas.height - (candle.c * 1.3);
                 const yHigh = canvas.height - (candle.h * 1.3);
                 const yLow = canvas.height - (candle.l * 1.3);
                 
-                // Using the rich professional green and red hex tokens
                 ctx.strokeStyle = isGreen ? '#02c076' : '#f84960';
                 ctx.fillStyle = isGreen ? '#02c076' : '#f84960';
                 ctx.lineWidth = 2;
                 
-                // Draw Wicks strings
                 ctx.beginPath();
                 ctx.moveTo(x + candleWidth / 2, yHigh);
                 ctx.lineTo(x + candleWidth / 2, yLow);
                 ctx.stroke();
                 
-                // Draw Candle solid body structures
                 ctx.fillRect(x, Math.min(yOpen, yClose), candleWidth, Math.max(2, Math.abs(yOpen - yClose)));
             });
         }
@@ -664,7 +699,6 @@
             const res = await fetch(`/api/user/${userTarget}`);
             const data = await res.json();
             
-            // Map data directly into working crypto metrics labels
             document.getElementById('usd-bal').innerText = `$${data.balances.USD.toFixed(2)}`;
             document.getElementById('walletCryptoBalance').innerText = `${data.balances.USD.toFixed(2)} USDT`;
             document.getElementById('asset-bal').innerText = `${data.balances.ASSET.toFixed(4)} UNITS`;
@@ -719,7 +753,6 @@
             updateDashboard();
         }
 
-        // Initialize App Engine Setup on boot up sequence
         window.onload = () => {
             drawCandlesticks('candlestickCanvasLanding');
             fetch('/api/user/trader1').then(r => r.json()).then(data => {
