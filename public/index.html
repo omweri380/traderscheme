@@ -3,70 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- This changes the name on your browser tab -->
-    <title>traderscheme.com | Trading Desk</title>
+    <title>traderscheme.com | Premium Trading Desk</title>
     <style>
-        body { font-family: sans-serif; background: #121214; color: #fff; padding: 20px; margin: 0; }
-        .navbar { background: #1a1a1e; padding: 15px 30px; border-bottom: 1px solid #2a2a30; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .brand { font-size: 22px; font-weight: bold; color: #00e676; letter-spacing: 0.5px; }
-        .container { max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 0 20px; }
-        .card { background: #1a1a1e; border: 1px solid #2a2a30; padding: 20px; border-radius: 8px; }
-        .full-width { grid-column: 1 / -1; }
-        input, select, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 4px; border: 1px solid #333; background: #222; color: #fff; box-sizing: border-box; }
-        button { background: #00e676; color: #000; font-weight: bold; border: none; cursor: pointer; }
+        :root {
+            --bg-main: #0b0e11;
+            --bg-card: #181a20;
+            --bg-input: #2b2f36;
+            --primary: #02c076;
+            --primary-hover: #03d885;
+            --danger: #f6465d;
+            --text-muted: #848e9c;
+            --border-color: #2b2f36;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-main);
+            color: #eaecef;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Upgraded Navbar */
+        .navbar {
+            background: var(--bg-card);
+            padding: 15px 30px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand::before {
+            content: "⚡";
+        }
+
+        .status-badge {
+            background: rgba(2, 192, 118, 0.1);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid rgba(2, 192, 118, 0.2);
+        }
+
+        /* Container & Layout */
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Sleek Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            border-color: #474d57;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        /* Realistic Decorative Chart Element */
+        .mini-chart {
+            background: rgba(2, 192, 118, 0.05);
+            border: 1px dashed rgba(2, 192, 118, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            color: var(--primary);
+            font-size: 13px;
+            font-family: monospace;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        /* Form Inputs & Buttons */
+        label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: #fff;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s;
+        }
+
+        .btn-deposit {
+            background: #2b3139;
+            color: #eaecef;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-deposit:hover {
+            background: #363c45;
+        }
+
+        .btn-trade {
+            background: var(--primary);
+            color: #000;
+        }
+
+        .btn-trade:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Metric Rows */
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .metric-label {
+            color: var(--text-muted);
+        }
+
+        .metric-value {
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
 
-<!-- New Header Navigation Bar -->
-<div class="navbar">
-    <div class="brand">traderscheme.com</div>
-    <div style="color: #aaa; font-size: 14px;">Live Trading Desk</div>
-</div>
+    <!-- Professional Navbar -->
+    <div class="navbar">
+        <div class="brand">traderscheme.com</div>
+        <div class="status-badge">● LIVE CORE CONSOLE</div>
+    </div>
 
-<div class="container">
-    <div class="card full-width">
-        <h2>Dashboard</h2>
-        <label>Account User: </label>
-        <input type="text" id="username" value="trader1" onchange="updateDashboard()">
-        <p>USD Balance: <span id="usd-bal" style="color:#00e676">$0.00</span> | Asset Balance: <span id="asset-bal" style="color:#00b0ff">0.00 UNITS</span></p>
-        <p>Market Price: <span id="market-price" style="font-size:20px; font-weight:bold;">$100.00</span></p>
+    <div class="container">
+        <!-- Main Terminal Dashboard -->
+        <div class="card full-width">
+            <h2>Account Terminal Overview</h2>
+            
+            <label for="username">Operator Identification</label>
+            <input type="text" id="username" value="trader1" onchange="updateDashboard()">
+            
+            <div class="metric-row">
+                <span class="metric-label">Liquidity Pool Balance (USD)</span>
+                <span id="usd-bal" class="metric-value" style="color: var(--primary);">$0.00</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Allocated Capital Position</span>
+                <span id="asset-bal" class="metric-value" style="color: #00b0ff;">0.00 UNITS</span>
+            </div>
+            <div class="metric-row" style="border: none;">
+                <span class="metric-label">Index Reference Price</span>
+                <span id="market-price" class="metric-value" style="font-size: 18px; color: #fff;">$100.00</span>
+            </div>
+
+            <!-- New Decorative Chart Feature -->
+            <div class="mini-chart">
+                📊 FEED STABLE // [▲ VOLATILITY STABLE]
+            </div>
+        </div>
+
+        <!-- Funding Node -->
+        <div class="card">
+            <h2>Capital Deposit</h2>
+            <label>Amount to Allocate ($)</label>
+            <input type="number" id="deposit-amount" placeholder="0.00">
+            <button class="btn-deposit" onclick="handleDeposit()">Execute Funding</button>
+        </div>
+
+        <!-- Trading Node -->
+        <div class="card">
+            <h2>Execution Engine</h2>
+            <label>Order Direction</label>
+            <select id="trade-side">
+                <option value="BUY">BUY / LONG</option>
+                <option value="SELL">SELL / SHORT</option>
+            </select>
+            <label>Order Target Volume (Units)</label>
+            <input type="number" id="trade-qty" placeholder="0">
+            <button class="btn-trade" onclick="handleTrade()">Transmit Order Routing</button>
+        </div>
     </div>
-    <div class="card">
-        <h2>Deposit</h2>
-        <input type="number" id="deposit-amount" placeholder="Amount ($)">
-        <button onclick="handleDeposit()">Deposit Cash</button>
-    </div>
-    <div class="card">
-        <h2>Trade</h2>
-        <select id="trade-side"><option value="BUY">Buy</option><option value="SELL">Sell</option></select>
-        <input type="number" id="trade-qty" placeholder="Quantity">
-        <button onclick="handleTrade()">Submit Order</button>
-    </div>
-</div>
-<script>
-    async function updateDashboard() {
-        const username = document.getElementById('username').value;
-        const res = await fetch(`/api/user/${username}`);
-        const data = await res.json();
-        document.getElementById('usd-bal').innerText = `$${data.balances.USD.toFixed(2)}`;
-        document.getElementById('asset-bal').innerText = `${data.balances.ASSET.toFixed(4)} UNITS`;
-        document.getElementById('market-price').innerText = `$${data.currentMarketPrice.toFixed(2)}`;
-    }
-    async function handleDeposit() {
-        const username = document.getElementById('username').value;
-        const amount = document.getElementById('deposit-amount').value;
-        await fetch('/api/deposit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, amount }) });
+
+    <script>
+        async function updateDashboard() {
+            const username = document.getElementById('username').value;
+            const res = await fetch(`/api/user/${username}`);
+            const data = await res.json();
+            document.getElementById('usd-bal').innerText = `$${data.balances.USD.toFixed(2)}`;
+            document.getElementById('asset-bal').innerText = `${data.balances.ASSET.toFixed(4)} UNITS`;
+            document.getElementById('market-price').innerText = `$${data.currentMarketPrice.toFixed(2)}`;
+        }
+
+        async function handleDeposit() {
+            const username = document.getElementById('username').value;
+            const amount = document.getElementById('deposit-amount').value;
+            await fetch('/api/deposit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, amount })
+            });
+            document.getElementById('deposit-amount').value = '';
+            updateDashboard();
+        }
+
+        async function handleTrade() {
+            const username = document.getElementById('username').value;
+            const side = document.getElementById('trade-side').value;
+            const quantity = document.getElementById('trade-qty').value;
+            await fetch('/api/trade', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, side, quantity })
+            });
+            document.getElementById('trade-qty').value = '';
+            updateDashboard();
+        }
+
         updateDashboard();
-    }
-    async function handleTrade() {
-        const username = document.getElementById('username').value;
-        const side = document.getElementById('trade-side').value;
-        const quantity = document.getElementById('trade-qty').value;
-        await fetch('/api/trade', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, side, quantity }) });
-        updateDashboard();
-    }
-    updateDashboard();
-</script>
+    </script>
 </body>
 </html>
