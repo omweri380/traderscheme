@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>traderscheme.com | Multi-Asset Cashier Desk</title>
+    <title>traderscheme.com | Institutional Trading Desk</title>
     <style>
         :root {
-            --bg-main: #f8fafc;        /* Soft Deriv off-white background */
-            --bg-card: #ffffff;        /* Pure white layout panels */
-            --bg-input: #ffffff;       /* Clean white input fields */
-            --primary: #00a86b;        /* Crisp Deriv action green */
-            --primary-hover: #008f58;  /* Deep hover green */
-            --danger: #dc3545;         /* Red for short positions/errors */
-            --text-main: #1e293b;      /* Dark slate main text */
-            --text-muted: #64748b;     /* Medium slate gray text */
-            --border-color: #e2e8f0;   /* Precision layout dividers */
+            --bg-main: #f4f6f8;        /* Clean light-gray background */
+            --bg-card: #ffffff;        /* Pure white for panels */
+            --bg-input: #ffffff;       /* Pure white for input fields */
+            --primary: #00a86b;        /* Professional premium green */
+            --primary-hover: #008f5a;  /* Hover button green */
+            --danger: #dc3545;         /* Crisp red for shorting/danger */
+            --text-main: #1e293b;      /* Sharp, highly-readable dark text */
+            --text-muted: #64748b;     /* Slate gray secondary text */
+            --border-color: #e2e8f0;   /* Light minimalist border lines */
         }
 
         body {
@@ -23,17 +23,18 @@
             color: var(--text-main);
             padding: 0;
             margin: 0;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Deriv-Style Premium Header */
+        /* Professional Header bar with Logo */
         .navbar {
             background: var(--bg-card);
-            padding: 12px 24px;
+            padding: 14px 24px;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .brand-container {
@@ -42,8 +43,14 @@
             gap: 8px;
         }
 
+        .brand-logo {
+            width: 26px;
+            height: 26px;
+            fill: var(--primary);
+        }
+
         .brand {
-            font-size: 18px;
+            font-size: 19px;
             font-weight: 700;
             color: var(--text-main);
             letter-spacing: -0.5px;
@@ -53,35 +60,66 @@
             color: var(--primary);
         }
 
-        /* Top Bar Wallet Summary Widget */
-        .wallet-widget {
+        .secure-badge {
             display: flex;
             align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
             background: #f1f5f9;
-            border: 1px solid var(--border-color);
-            border-radius: 30px;
-            padding: 4px 14px;
-            gap: 10px;
+            padding: 6px 12px;
+            border-radius: 6px;
         }
 
-        .wallet-icon {
-            font-size: 14px;
+        .secure-icon {
+            width: 12px;
+            height: 12px;
+            fill: var(--text-muted);
         }
 
-        .wallet-balance {
-            font-weight: 700;
-            font-size: 14px;
+        /* Sub-Header Network Banner */
+        .network-banner {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 8px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
             color: var(--primary);
         }
 
-        /* Master Dashboard Container */
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            animation: pulse-glow 1.5s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+
+        /* Layout Architecture */
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 24px auto;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
-            padding: 0 20px;
+            padding: 0 16px;
         }
 
         @media (max-width: 768px) {
@@ -90,13 +128,13 @@
             }
         }
 
-        /* Deriv Minimalist Layout Cards */
+        /* Premium Minimalist Cards */
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             padding: 24px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
         }
 
         .full-width {
@@ -105,46 +143,97 @@
 
         h2 {
             margin-top: 0;
-            margin-bottom: 18px;
-            font-size: 16px;
-            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 700;
             color: var(--text-main);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* Wallet Section Grids */
-        .wallet-grid {
+        /* Wallet Row Metrics Block */
+        .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 16px;
-            margin-top: 12px;
+            margin-bottom: 8px;
         }
 
-        .wallet-pill {
-            background: #fafafa;
+        .metric-box {
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            padding: 14px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #fafbfc;
+        }
+
+        .metric-icon-wrapper {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 168, 107, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .metric-icon-wrapper.blue-theme {
+            background: rgba(11, 94, 215, 0.08);
+        }
+
+        .metric-icon-wrapper svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .metric-info {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 2px;
         }
 
-        .wallet-pill-label {
+        .metric-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .metric-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Attractive Trading Feed graph simulation */
+        .chart-mock {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 16px;
+            margin-top: 16px;
+            background: #ffffff;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
             font-size: 12px;
             color: var(--text-muted);
-            font-weight: 500;
+            margin-bottom: 12px;
         }
 
-        .wallet-pill-value {
-            font-size: 18px;
-            font-weight: 700;
+        .chart-svg-container {
+            width: 100%;
+            height: 80px;
         }
 
-        /* Form Styling Elements */
+        /* Form Layout Elements */
         label {
             display: block;
             font-size: 12px;
@@ -155,162 +244,197 @@
 
         input, select {
             width: 100%;
-            padding: 12px;
+            padding: 12px 14px;
             margin-bottom: 16px;
-            border-radius: 4px;
+            border-radius: 6px;
             border: 1px solid #cbd5e1;
             background: var(--bg-input);
             color: var(--text-main);
             box-sizing: border-box;
             font-size: 14px;
+            font-weight: 500;
             transition: border-color 0.15s ease;
         }
 
         input:focus, select:focus {
             outline: none;
             border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 168, 107, 0.08);
         }
 
-        /* Form Submission Buttons */
+        /* Clean Functional Buttons */
         button {
             width: 100%;
-            padding: 12px;
-            border-radius: 4px;
+            padding: 14px;
+            border-radius: 6px;
             font-weight: 600;
             font-size: 14px;
             border: none;
             cursor: pointer;
-            transition: background 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background 0.15s ease, transform 0.1s ease;
         }
 
-        .btn-action-green {
+        button:active {
+            transform: scale(0.99);
+        }
+
+        .btn-green {
             background: var(--primary);
             color: #ffffff;
         }
 
-        .btn-action-green:hover {
+        .btn-green:hover {
             background: var(--primary-hover);
         }
 
-        .btn-action-secondary {
-            background: #f1f5f9;
+        .btn-outline {
+            background: #ffffff;
             color: var(--text-main);
-            border: 1px solid var(--border-color);
+            border: 1px solid #cbd5e1;
         }
 
-        .btn-action-secondary:hover {
-            background: #e2e8f0;
-        }
-
-        /* Decorative Market Pricing Feed ticker */
-        .live-ticker {
-            background: rgba(0, 168, 107, 0.04);
-            border: 1px solid rgba(0, 168, 107, 0.15);
-            border-radius: 4px;
-            padding: 12px;
-            margin-bottom: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-        }
-
-        .ticker-dot {
-            color: var(--primary);
-            font-weight: bold;
-            animation: blink 1.5s infinite;
-        }
-
-        @keyframes blink {
-            50% { opacity: 0; }
+        .btn-outline:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
         }
     </style>
 </head>
 <body>
 
-    <!-- Deriv-Inspired Navigation Top Bar -->
+    <!-- Professional Navbar Block -->
     <div class="navbar">
         <div class="brand-container">
+            <!-- Professional Vector Logo Trend Icon -->
+            <svg class="brand-logo" viewBox="0 0 24 24">
+                <path d="M3.5 18.5l6-6 4 4L22 6.5l-1.41-1.42-7.09 7.09-4-4-7.5 7.5L3.5 18.5z"/>
+            </svg>
             <div class="brand">trader<span>scheme</span></div>
         </div>
         
-        <!-- Live Wallet Top Display Balance -->
-        <div class="wallet-widget">
-            <span class="wallet-icon">🟩 USD Wallet:</span>
-            <span id="top-wallet-bal" class="wallet-balance">$0.00</span>
+        <div class="secure-badge">
+            <svg class="secure-icon" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            SECURE SERVER
         </div>
+    </div>
+
+    <!-- Live Infrastructure Status Ribbon Bar -->
+    <div class="network-banner">
+        <div class="status-indicator">
+            <div class="pulse-dot"></div>
+            LIVE CORE CONNECTED
+        </div>
+        <div>UTC TERMINAL FEED ACTIVE</div>
     </div>
 
     <div class="container">
         
-        <!-- Operational Crypto Wallet Matrix -->
+        <!-- Account Overview Panel Section -->
         <div class="card full-width">
-            <h2>Crypto Wallet & Central Accounts</h2>
-            <label for="username">Secure Trader Identifier Account Link</label>
+            <h2>
+                <svg style="width:16px;height:16px;fill:var(--text-main);" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H5v-2h9v2zm3-4H5v-2h12v2zm0-4H5V7h12v2z"/></svg>
+                Trading Desk Terminal Overview
+            </h2>
+            
+            <label for="username">Operator Credentials Identification</label>
             <input type="text" id="username" value="trader1" onchange="updateDashboard()">
             
-            <div class="wallet-grid">
-                <div class="wallet-pill">
-                    <span class="wallet-pill-label">Fiat Ledger Balance (USD)</span>
-                    <span id="usd-bal" class="wallet-pill-value" style="color: var(--primary);">$0.00</span>
+            <div class="metrics-grid">
+                <!-- Fiat Balance Module -->
+                <div class="metric-box">
+                    <div class="metric-icon-wrapper">
+                        <svg style="fill:var(--primary);" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                    </div>
+                    <div class="metric-info">
+                        <span class="metric-label">USD Wallet Ledger Balance</span>
+                        <span id="usd-bal" class="metric-value" style="color: var(--primary);">$0.00</span>
+                    </div>
                 </div>
-                <div class="wallet-pill">
-                    <span class="wallet-pill-label">Crypto Portfolio (ASSET)</span>
-                    <span id="asset-bal" class="wallet-pill-value" style="color: var(--text-main);">0.0000 UNITS</span>
+
+                <!-- Portfolio Asset Module -->
+                <div class="metric-box">
+                    <div class="metric-icon-wrapper blue-theme">
+                        <svg style="fill:#0b5ed7;" viewBox="0 0 24 24"><path d="M12 2L1 7l11 5 9-4.09V17h2V7L12 2zm0 13l-9-4.09V15l9 4.09 8-3.64v-4.18L12 15z"/></svg>
+                    </div>
+                    <div class="metric-info">
+                        <span class="metric-label">Allocated Capital Portfolio</span>
+                        <span id="asset-bal" class="metric-value" style="color: #0b5ed7;">0.0000 UNITS</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attractive Vector Waveform Simulation Graphic Chart -->
+            <div class="chart-mock">
+                <div class="chart-header">
+                    <span>Index Spot Reference Price: <strong id="market-price" style="color:var(--text-main); font-size:13px;">$100.00</strong></span>
+                    <span style="color: var(--primary); font-weight:600;">● VOLATILITY SIGNAL FEED</span>
+                </div>
+                <div class="chart-svg-container">
+                    <svg width="100%" height="100%" viewBox="0 0 500 80" preserveAspectRatio="none">
+                        <path d="M0,60 Q50,40 100,65 T200,30 T300,55 T400,25 T500,45" fill="none" stroke="rgba(0, 168, 107, 0.25)" stroke-width="2.5"></path>
+                        <path d="M0,55 Q45,35 95,55 T195,25 T295,45 T395,15 T500,35" fill="none" stroke="var(--primary)" stroke-width="2.5"></path>
+                    </svg>
                 </div>
             </div>
         </div>
 
-        <!-- Real-Time Asset Router Panel -->
+        <!-- System Execution Form Engine Desk -->
         <div class="card full-width">
-            <h2>Execution Engine Desk</h2>
-            <div class="live-ticker">
-                <span>Index Market Spot Reference: <strong id="market-price">$100.00</strong></span>
-                <span class="ticker-dot">● LIVE STREAMING</span>
-            </div>
-
+            <h2>
+                <svg style="width:16px;height:16px;fill:var(--text-main);" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+                Order Execution Terminal Routing
+            </h2>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                 <div>
-                    <label>Order Action Direction</label>
+                    <label>Order Target Action</label>
                     <select id="trade-side">
-                        <option value="BUY">BUY / BUY LONG</option>
-                        <option value="SELL">SELL / SELL SHORT</option>
+                        <option value="BUY">BUY / POSITION LONG</option>
+                        <option value="SELL">SELL / POSITION SHORT</option>
                     </select>
                 </div>
                 <div>
-                    <label>Order Target Size (Units)</label>
+                    <label>Order Size Allocation (Units)</label>
                     <input type="number" id="trade-qty" placeholder="0">
                 </div>
             </div>
-            <button class="btn-action-green" onclick="handleTrade()">Transmit Order Routing</button>
+            <button class="btn-green" onclick="handleTrade()">Transmit Orders Routing</button>
         </div>
 
         <!-- Cashier Segment: Money Deposit System -->
         <div class="card">
-            <h2>Cashier | Capital Deposit</h2>
-            <label>Payment Method Portal Selection</label>
+            <h2>
+                <svg style="width:16px;height:16px;fill:var(--text-main);" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                Cashier Terminal | Deposit
+            </h2>
+            <label>Payment Gateway Node Network</label>
             <select>
-                <option value="crypto">Tether USD (USDT-TRC20)</option>
-                <option value="crypto-btc">Bitcoin Wallet (BTC)</option>
-                <option value="fiat-card">Instant Fiat Card Gateway</option>
+                <option value="usdt">Tether USD (USDT-TRC20 Network)</option>
+                <option value="btc">Bitcoin Secure Mainnet (BTC)</option>
+                <option value="fiat">Instant Credit Settlement Node</option>
             </select>
-            <label>Deposit Allocation Amount ($)</label>
+            <label>Amount to Fund Allocation ($)</label>
             <input type="number" id="deposit-amount" placeholder="0.00">
-            <button class="btn-action-green" onclick="handleDeposit()">Execute Secure Funding</button>
+            <button class="btn-green" onclick="handleDeposit()">Execute Secure Funding</button>
         </div>
 
         <!-- Cashier Segment: Money Withdrawal System -->
         <div class="card">
-            <h2>Cashier | Account Withdrawal</h2>
-            <label>Payout Destination Network</label>
+            <h2>
+                <svg style="width:16px;height:16px;fill:var(--text-main);" viewBox="0 0 24 24"><path d="M5 9h4v6H9v6h6v-6h4l-7-7-7 7zm14 9v2H5v-2h14z"/></svg>
+                Cashier Terminal | Withdrawal
+            </h2>
+            <label>Payout Payout Destination Portal</label>
             <select id="withdraw-method">
-                <option value="crypto">Tether USD (USDT-TRC20 Wallet)</option>
-                <option value="crypto-btc">Bitcoin Personal Address (BTC)</option>
-                <option value="fiat-bank">Direct Wire Settlement Transfer</option>
+                <option value="usdt">Tether USD (USDT-TRC20 Address)</option>
+                <option value="btc">Bitcoin Personal Address Ledger</option>
+                <option value="wire">Direct Institutional Bank Wire</option>
             </select>
-            <label>Target Withdrawal Quantity ($)</label>
+            <label>Withdrawal Clearance Quantity ($)</label>
             <input type="number" id="withdraw-amount" placeholder="0.00">
-            <button class="btn-action-secondary" onclick="handleWithdrawal()">Request Clearing Payout</button>
+            <button class="btn-outline" onclick="handleWithdrawal()">Transmit Settlement Release</button>
         </div>
     </div>
 
@@ -320,11 +444,8 @@
             const res = await fetch(`/api/user/${username}`);
             const data = await res.json();
             
-            // Format numbers to match clean trading interfaces
             const formattedUSD = `$${data.balances.USD.toFixed(2)}`;
-            
             document.getElementById('usd-bal').innerText = formattedUSD;
-            document.getElementById('top-wallet-bal').innerText = formattedUSD;
             document.getElementById('asset-bal').innerText = `${data.balances.ASSET.toFixed(4)} UNITS`;
             document.getElementById('market-price').innerText = `$${data.currentMarketPrice.toFixed(2)}`;
         }
@@ -332,7 +453,7 @@
         async function handleDeposit() {
             const username = document.getElementById('username').value;
             const amount = document.getElementById('deposit-amount').value;
-            if(!amount || amount <= 0) return alert('Please input valid transfer amount');
+            if(!amount || amount <= 0) return alert('Please supply a valid funding amount');
 
             await fetch('/api/deposit', {
                 method: 'POST',
@@ -346,9 +467,8 @@
         async function handleWithdrawal() {
             const username = document.getElementById('username').value;
             const amount = document.getElementById('withdraw-amount').value;
-            if(!amount || amount <= 0) return alert('Please input valid payout quantity');
+            if(!amount || amount <= 0) return alert('Please supply a valid withdrawal quantity');
             
-            // Note: Since your simple mock backend operates on deposits/trades, this triggers a mock payout deduction
             await fetch('/api/deposit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -362,7 +482,7 @@
             const username = document.getElementById('username').value;
             const side = document.getElementById('trade-side').value;
             const quantity = document.getElementById('trade-qty').value;
-            if(!quantity || quantity <= 0) return alert('Please input order size volume');
+            if(!quantity || quantity <= 0) return alert('Please specify a valid transaction volume size');
 
             await fetch('/api/trade', {
                 method: 'POST',
@@ -373,7 +493,7 @@
             updateDashboard();
         }
 
-        // Initialize display configuration on mount
+        // Run Initial State Core Bindings
         updateDashboard();
     </script>
 </body>
