@@ -627,20 +627,43 @@
             // Proceed forward to KYC documentation page
             showStage('verification');
         }
+// Replace your old registration function logic with this:
+async function handleRegistrationSubmit() {
+    const userVal = document.getElementById('regUser').value.trim();
+    const emailVal = document.getElementById('regEmail').value.trim();
+    const passVal = document.getElementById('regPass').value;
+    const confirmVal = document.getElementById('regPassConfirm').value;
 
-        function handleVerificationSubmit() {
-            const fileCheck = document.getElementById('kycFile');
-            if(!fileCheck.files.length) return alert('Compliance systems require structured identity confirmation files.');
-            
-            const activeUser = document.getElementById('regUser').value || 'trader1';
-            document.getElementById('terminalUserTag').innerText = "OPERATOR: " + activeUser.toUpperCase();
-            
-            document.getElementById('cryptoAddressString').innerText = "Deposit Address: TY" + Math.random().toString(36).substring(2, 12).toUpperCase() + "x7PqN9";
-            document.getElementById('navAuthActions').innerHTML = `<button class="btn-outline" onclick="window.location.reload()" style="color:var(--primary); border-color:var(--primary);">Disconnect Node</button>`;
-            
-            alert('Identity tokens approved. Opening live high-performance crypto wallet terminal structures.');
-            showStage('trading');
-            updateDashboard();
+    // Standard frontend validation
+    if (!userVal || !emailVal || !passVal || !confirmVal) return alert('All fields are required.');
+    if (passVal !== confirmVal) return alert('Passwords do not match.');
+
+    // Save the email globally so the next verification screen knows who is verifying
+    window.globalUserEmail = emailVal; 
+
+    try {
+        // 1. Alert the backend that a user wants to register
+        const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: userVal, email: emailVal })
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            // 2. If the server successfully emailed the code, show your OTP input screen
+            if(document.getElementById('targetDisplayEmail')) {
+                document.getElementById('targetDisplayEmail').innerText = emailVal;
+            }
+            showStage('email-auth'); // Use your existing function that switches screens
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (err) {
+        alert('Could not connect to the authentication server.');
+    }
+}
+        
         }
 
         function bypassToTradingDesk() {
