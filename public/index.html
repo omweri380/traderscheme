@@ -1,788 +1,190 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>traderscheme.com | Premium Multi-Asset Trading Node</title>
-    <style>
-        :root {
-            --bg-main: #0b0f19;        /* Deep midnight luxury background */
-            --bg-card: #131a26;        /* Sleek charcoal panel color */
-            --bg-input: #1b2434;       /* Integrated form field styling */
-            --primary: #f57c00;        /* Vibrant, lively Electric Orange */
-            --primary-hover: #e66a00;  /* Energetic orange hover accent */
-            --accent-green: #02c076;   /* Vivid dynamic green for buys/growth */
-            --danger: #f84960;         /* Vivid dynamic red for sells/shorts */
-            --text-main: #f0f4f8;      /* Bright premium white/gray typography */
-            --text-muted: #8491a5;     /* Balanced slate gray for subtexts */
-            --border-color: #222e43;   /* Sharp institutional border lines */
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: var(--bg-main);
-            color: var(--text-main);
-            padding: 0;
-            margin: 0;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Top Header Navigation Matrix */
-        .navbar {
-            background: var(--bg-card);
-            padding: 16px 24px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        }
-
-        .brand-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .brand-logo {
-            width: 28px;
-            height: 28px;
-            fill: var(--primary);
-        }
-
-        .brand {
-            font-size: 21px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            color: var(--text-main);
-        }
-
-        .brand span {
-            color: var(--primary);
-        }
-
-        .nav-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        /* Live Infrastructure Network Status Banner */
-        .network-banner {
-            background: #172131;
-            border-bottom: 1px solid var(--border-color);
-            padding: 10px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-muted);
-            letter-spacing: 0.5px;
-        }
-
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--accent-green);
-        }
-
-        .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--accent-green);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--accent-green);
-            animation: pulse-glow 1.8s infinite;
-        }
-
-        @keyframes pulse-glow {
-            0% { transform: scale(0.9); opacity: 0.5; }
-            50% { transform: scale(1.3); opacity: 1; }
-            100% { transform: scale(0.9); opacity: 0.5; }
-        }
-
-        /* Stage Architecture Windows */
-        .app-stage {
-            display: none; 
-            max-width: 1100px;
-            margin: 32px auto;
-            padding: 0 16px;
-        }
-
-        .active-stage {
-            display: block;
-        }
-
-        .grid-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-
-        @media (max-width: 768px) {
-            .grid-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Realistic Premium Interface Cards */
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            padding: 32px;
-            border-radius: 12px;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-            box-sizing: border-box;
-            backdrop-filter: blur(10px);
-        }
-
-        .auth-centered-card {
-            max-width: 450px;
-            margin: 40px auto;
-            border-top: 4px solid var(--primary); /* Vibrant Orange highlight accent */
-        }
-
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        h2 {
-            margin-top: 0;
-            margin-bottom: 24px;
-            font-size: 15px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Dynamic Crypto Wallet Infrastructure Panel */
-        .wallet-container {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 1px solid rgba(245, 124, 0, 0.3);
-            color: #ffffff;
-            border-radius: 10px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
-        }
-
-        .wallet-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-        }
-
-        .wallet-crypto-addr {
-            font-family: 'Courier New', monospace;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            margin-top: 12px;
-            word-break: break-all;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            margin-bottom: 24px;
-        }
-
-        .metric-box {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            background: #16202e;
-        }
-
-        .metric-value {
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        /* Candlestick Layout Container */
-        .chart-container {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            background: #0d131c;
-        }
-
-        /* Form Controls styling */
-        label {
-            display: block;
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 14px 16px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-input);
-            color: var(--text-main);
-            box-sizing: border-box;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(245, 124, 0, 0.15);
-            background: #1f2a3d;
-        }
-
-        /* Password Input Area Container */
-        .password-container {
-            position: relative;
-            width: 100%;
-        }
-
-        .password-container input {
-            padding-right: 50px; 
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 14px;
-            top: 13px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            z-index: 5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .toggle-password svg {
-            width: 20px;
-            height: 20px;
-            fill: var(--text-muted);
-            transition: fill 0.2s ease;
-        }
-
-        .toggle-password:hover svg {
-            fill: var(--primary);
-        }
-
-        /* Structural Button Framework */
-        button {
-            padding: 14px 24px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 14px;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .btn-green { 
-            background: var(--primary); 
-            color: #ffffff; 
-        }
-        .btn-green:hover { 
-            background: var(--primary-hover); 
-            box-shadow: 0 6px 20px rgba(245, 124, 0, 0.3);
-        }
+<script>
+    // Central Routing Machine
+    function showStage(stageId) {
+        document.querySelectorAll('.app-stage').forEach(el => el.classList.remove('active-stage'));
+        document.getElementById('stage-' + stageId).classList.add('active-stage');
         
-        .btn-outline { 
-            background: transparent; 
-            color: var(--text-main); 
-            border: 2px solid var(--border-color); 
-        }
-        .btn-outline:hover { 
-            background: rgba(255, 255, 255, 0.04); 
-            border-color: var(--text-muted); 
-        }
-        .btn-full { width: 100%; padding: 16px; }
-    </style>
-</head>
-<body>
-
-    <!-- Global Navigation Header Matrix -->
-    <div class="navbar">
-        <div class="brand-container" onclick="showStage('landing')" style="cursor:pointer;">
-            <svg class="brand-logo" viewBox="0 0 24 24">
-                <path d="M3.5 18.5l6-6 4 4L22 6.5l-1.41-1.42-7.09 7.09-4-4-7.5 7.5L3.5 18.5z"/>
-            </svg>
-            <div class="brand">trader<span>scheme</span></div>
-        </div>
-        
-        <div class="nav-actions" id="navAuthActions">
-            <button class="btn-outline" onclick="showStage('login')">Sign In</button>
-            <button class="btn-green" onclick="showStage('register')">Create Account</button>
-        </div>
-    </div>
-
-    <!-- Live Status Infrastructure Banner -->
-    <div class="network-banner">
-        <div class="status-indicator">
-            <div class="pulse-dot"></div>
-            SECURE LIVE NETWORK FEED ACTIVE
-        </div>
-        <div id="terminalUserTag" style="color: var(--primary); font-weight: 700;">GUEST PROFILE</div>
-    </div>
-
-    <!-- STAGE 1: Public Dashboard Landing Screen View -->
-    <div id="stage-landing" class="app-stage active-stage">
-        <div style="max-width:800px; margin: 60px auto; text-align:center;">
-            <h1 style="font-size:42px; font-weight:800; letter-spacing:-1.5px; margin-bottom:16px; background: linear-gradient(to right, #ffffff, #8491a5); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Institutional Multi-Asset Retail Desk</h1>
-            <p style="color:var(--text-muted); font-size:18px; margin-bottom:40px; max-width: 600px; margin-left: auto; margin-right: auto;">Execute live contract positions, track index pairs, and settle instantly to secure cryptographic hardware wallets.</p>
-        </div>
-        
-        <div class="card">
-            <div style="display:flex; justify-content:space-between; margin-bottom:16px; align-items:center;">
-                <h2><span style="color:var(--primary);">●</span> Index Spot Reference Feed</h2>
-                <strong style="font-size:20px; color: var(--accent-green);" id="landing-price">$100.00</strong>
-            </div>
-            <canvas id="candlestickCanvasLanding" height="220" style="width:100%; background:#0d131c; border-radius:8px; border:1px solid var(--border-color);"></canvas>
-            <div style="margin-top:32px; text-align:center;">
-                <button class="btn-green" style="padding:16px 48px; font-size: 15px;" onclick="showStage('register')">Initialize Safe Wallet Setup</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- STAGE 2: Account Registration Dashboard Flow -->
-    <div id="stage-register" class="app-stage">
-        <div class="card auth-centered-card">
-            <h2>Create Secure Account</h2>
-            <p style="font-size:14px; color:var(--text-muted); margin-top:-14px; margin-bottom:24px;">Configure an audited structural account routing node.</p>
-            
-            <label for="regUser">Operator Username Tag</label>
-            <input type="text" id="regUser" placeholder="e.g. trader1">
-
-            <label for="regEmail">Secure Email Address</label>
-            <input type="email" id="regEmail" placeholder="name@example.com">
-
-            <label for="regPass">Security Core Password</label>
-            <div class="password-container">
-                <input type="password" id="regPass" placeholder="••••••••">
-                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPass', this)">
-                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                </button>
-            </div>
-
-            <label for="regPassConfirm">Confirm Core Password</label>
-            <div class="password-container">
-                <input type="password" id="regPassConfirm" placeholder="••••••••">
-                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPassConfirm', this)">
-                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                </button>
-            </div>
-
-            <button class="btn-green btn-full" onclick="handleRegistrationSubmit()">Proceed to Verification Gateway</button>
-        </div>
-    </div>
-
-    <!-- STAGE 2.5: Anti-Scam Secure Email Pin Verification Matrix -->
-    <div id="stage-email-auth" class="app-stage">
-        <div class="card auth-centered-card">
-            <h2>Verify Your Email</h2>
-            <p style="font-size:14px; color:var(--text-muted); margin-top:-14px; margin-bottom:24px;">To protect network architecture from malicious bot setups, an authorization token has been deployed to your address.</p>
-            
-            <div style="background: rgba(245, 124, 0, 0.1); border: 1px solid var(--primary); border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center;">
-                <span style="font-size: 13px; color: var(--text-main);">Mock System Notification: Check <strong id="targetDisplayEmail">your email</strong> for code: <strong style="color:var(--primary); font-size:15px; letter-spacing:1px;">774-902</strong></span>
-            </div>
-
-            <label for="emailOtpCode">Input 6-Digit Verification Pin</label>
-            <input type="text" id="emailOtpCode" placeholder="000000" maxlength="7" style="text-align:center; font-size:18px; font-weight:700; letter-spacing:4px;">
-
-            <button class="btn-green btn-full" onclick="confirmEmailOtpToken()">Verify Email Authenticity</button>
-        </div>
-    </div>
-
-    <!-- STAGE 2 ALTERNATE: Sign In Screen Profile Area -->
-    <div id="stage-login" class="app-stage">
-        <div class="card auth-centered-card">
-            <h2>Sign In to Core Node</h2>
-            <label for="loginEmail">Email Address</label>
-            <input type="email" id="loginEmail" placeholder="name@example.com">
-            
-            <label for="loginPass">Password</label>
-            <div class="password-container">
-                <input type="password" id="loginPass" placeholder="••••••••">
-                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('loginPass', this)">
-                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                </button>
-            </div>
-            
-            <button class="btn-green btn-full" onclick="bypassToTradingDesk()">Initialize Terminal Connection</button>
-        </div>
-    </div>
-
-    <!-- STAGE 3: Identity Verification (KYC) Hub Gateway -->
-    <div id="stage-verification" class="app-stage">
-        <div class="card auth-centered-card" style="max-width:550px;">
-            <div style="text-align:center; margin-bottom:24px;">
-                <span style="background:rgba(245, 124, 0, 0.1); padding:12px; border-radius:50%; display:inline-block; margin-bottom:12px;">
-                    <svg style="width:28px; height:28px; fill:var(--primary);" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                </span>
-                <h3 style="margin:0; font-size:20px; color: var(--text-main);">Compliance Verification Routing</h3>
-                <p style="font-size:14px; color:var(--text-muted); margin:6px 0 0 0;">Upload identification criteria files to validate dynamic payout channels.</p>
-            </div>
-            
-            <label>Government Verification Document Category</label>
-            <select id="kycType">
-                <option value="passport">International Passport Clearance Document</option>
-                <option value="national_id">National Identification Permit / Driver License</option>
-            </select>
-
-            <label>Upload High-Resolution Identification File</label>
-            <input type="file" id="kycFile" accept="image/*,application/pdf" style="padding:10px; background: var(--bg-input); border: 1px dashed var(--border-color); color: var(--text-muted);">
-
-            <button class="btn-green btn-full" onclick="handleVerificationSubmit()">Verify Compliance Files & Launch Desk</button>
-        </div>
-    </div>
-
-    <!-- STAGE 4: Final Main Trading Console Layout -->
-    <div id="stage-trading" class="app-stage">
-        <div class="grid-layout">
-            
-            <!-- Real Working Crypto Wallet Section Layout Panel -->
-            <div class="card full-width">
-                <div class="wallet-container">
-                    <div class="wallet-header">
-                        <span>🔒 Operational Multi-Asset Ledger Vault</span>
-                        <span style="color: var(--accent-green); font-weight:700;">● Secured Node Connection</span>
-                    </div>
-                    <div style="font-size:36px; font-weight:800; margin:16px 0 6px 0; color: #ffffff;" id="walletCryptoBalance">0.00 USDT</div>
-                    <div class="wallet-crypto-addr">
-                        <span id="cryptoAddressString" style="color: #94a3b8;">Generating cryptographic secure key block...</span>
-                        <span style="color:var(--primary); font-size:11px; font-weight:700; cursor:pointer;" onclick="alert('Secure node key copied.')">COPY</span>
-                    </div>
-                </div>
-
-                <div class="metrics-grid">
-                    <div class="metric-box">
-                        <div style="width:44px; height:44px; border-radius:50%; background:rgba(2, 192, 118, 0.1); display:flex; align-items:center; justify-content:center;">
-                            <svg style="width:22px; height:22px; fill:var(--accent-green);" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-                        </div>
-                        <div>
-                            <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing: 0.3px;">Available Cash Balance</div>
-                            <div id="usd-bal" class="metric-value" style="color:var(--accent-green);">$0.00</div>
-                        </div>
-                    </div>
-                    <div class="metric-box">
-                        <div style="width:44px; height:44px; border-radius:50%; background:rgba(245, 124, 0, 0.1); display:flex; align-items:center; justify-content:center;">
-                            <svg style="width:22px; height:22px; fill:var(--primary);" viewBox="0 0 24 24"><path d="M12 2L1 7l11 5 9-4.09V17h2V7L12 2zm0 13l-9-4.09V15l9 4.09 8-3.64v-4.18L12 15z"/></svg>
-                        </div>
-                        <div>
-                            <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing: 0.3px;">Active Capital Allocation</div>
-                            <div id="asset-bal" class="metric-value" style="color: var(--primary);">0.0000 UNITS</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Main Realistic Chart Display Module -->
-                <div class="chart-container">
-                    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:14px; color:var(--text-muted);">
-                        <span>Index Spot Contract Price: <strong id="market-price" style="color:var(--text-main); font-size: 13px;">$100.00</strong></span>
-                        <span style="color:var(--accent-green); font-weight:700;">● SECURE DATA PIPELINE FEED</span>
-                    </div>
-                    <canvas id="candlestickCanvasTrading" height="190"></canvas>
-                </div>
-            </div>
-
-            <!-- Transaction Order Desk Mapping Entry -->
-            <div class="card full-width">
-                <h2>Order Routing Transmission Gateway</h2>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-                    <div>
-                        <label>Target Execution Side</label>
-                        <select id="trade-side">
-                            <option value="BUY">BUY / EXERCISE LONG POSITION</option>
-                            <option value="SELL">SELL / EXERCISE SHORT POSITION</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Order Volume Configuration (Units)</label>
-                        <input type="number" id="trade-qty" placeholder="0">
-                    </div>
-                </div>
-                <button class="btn-green btn-full" onclick="handleTrade()">Transmit Allocation Order</button>
-            </div>
-
-            <!-- Inbound Funding Node Block -->
-            <div class="card">
-                <h2>Funding Gateway | Deposit Ledger</h2>
-                <label>Deposit Infrastructure Inflow Network</label>
-                <select id="depositNetwork">
-                    <option value="usdt">Tether USD (USDT TRC20 Secure Chain)</option>
-                    <option value="btc">Bitcoin Core Network Mainnet Node</option>
-                </select>
-                <label>Value Liquidity Allocation Amount ($)</label>
-                <input type="number" id="deposit-amount" placeholder="0.00">
-                <button class="btn-green btn-full" onclick="handleDeposit()">Execute Secure Funding Deposit</button>
-            </div>
-
-            <!-- Outbound Vault Settlement Block -->
-            <div class="card">
-                <h2>Vault Settlement | Withdrawal Node</h2>
-                <label>Target Outflow Vault Destination</label>
-                <select id="withdrawNetwork">
-                    <option value="usdt">External TRC20 Ledger Wallet Target</option>
-                    <option value="btc">External Personal Bitcoin Core Address</option>
-                </select>
-                <label>Settlement Release Amount ($)</label>
-                <input type="number" id="withdraw-amount" placeholder="0.00">
-                <button class="btn-outline btn-full" style="color: var(--primary); border-color: var(--primary);" onclick="handleWithdrawal()">Release Vault Liquidity Settlement</button>
-            </div>
-
-        </div>
-    </div>
-
-    <script>
-        // Central Routing Machine
-        function showStage(stageId) {
-            document.querySelectorAll('.app-stage').forEach(el => el.classList.remove('active-stage'));
-            document.getElementById('stage-' + stageId).classList.add('active-stage');
-            
-            // Re-render financial candlesticks correctly upon toggle
-            if (stageId === 'landing') drawCandlesticks('candlestickCanvasLanding');
-            if (stageId === 'trading') drawCandlesticks('candlestickCanvasTrading');
-        }
-
-        // Vector Eye Icon Input Controller Matrix
-        function togglePasswordVisibility(inputId, buttonEl) {
-            const inputField = document.getElementById(inputId);
-            const eyeIconSvg = buttonEl.querySelector('svg');
-            
-            if (inputField.type === "password") {
-                inputField.type = "text";
-                // Switch to Slash Eye icon state vector geometry
-                eyeIconSvg.innerHTML = `<path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm11-3c-1.73-4.39-6-7.5-11-7.5S2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>`;
-                eyeIconSvg.style.fill = "var(--primary)";
-            } else {
-                inputField.type = "password";
-                // Return to Open Eye configuration
-                eyeIconSvg.innerHTML = `<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>`;
-                eyeIconSvg.style.fill = "var(--text-muted)";
-            }
-        }
-
-        // Form Validation submissions handling
-        function handleRegistrationSubmit() {
-            const userVal = document.getElementById('regUser').value.trim();
-            const emailVal = document.getElementById('regEmail').value.trim();
-            const passVal = document.getElementById('regPass').value;
-            const confirmVal = document.getElementById('regPassConfirm').value;
-
-            if (!userVal || !emailVal || !passVal || !confirmVal) {
-                return alert('All system identification credentials are required.');
-            }
-
-            if (passVal !== confirmVal) {
-                return alert('Security Error: Password fields do not match. Please verify inputs.');
-            }
-
-            // Route user credentials directly to anti-scam dashboard hub
-            document.getElementById('targetDisplayEmail').innerText = emailVal;
-            showStage('email-auth');
-        }
-
-        function confirmEmailOtpToken() {
-            const enteredOtp = document.getElementById('emailOtpCode').value.trim().replace('-', '');
-            // System matching security parameter control token
-            if (enteredOtp !== "774902") {
-                return alert('Invalid Account Verification Code Token. Access Denied.');
-            }
-            // Proceed forward to KYC documentation page
-            showStage('verification');
-        }
-// Replace your old registration function logic with this:
-async function handleRegistrationSubmit() {
-    const userVal = document.getElementById('regUser').value.trim();
-    const emailVal = document.getElementById('regEmail').value.trim();
-    const passVal = document.getElementById('regPass').value;
-    const confirmVal = document.getElementById('regPassConfirm').value;
-
-    // Standard frontend validation
-    if (!userVal || !emailVal || !passVal || !confirmVal) return alert('All fields are required.');
-    if (passVal !== confirmVal) return alert('Passwords do not match.');
-
-    // Save the email globally so the next verification screen knows who is verifying
-    window.globalUserEmail = emailVal; 
-
-    try {
-        // 1. Alert the backend that a user wants to register
-        const response = await fetch('/api/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: userVal, email: emailVal })
-        });
-        const data = await response.json();
-
-        if (data.success) {
-            // 2. If the server successfully emailed the code, show your OTP input screen
-            if(document.getElementById('targetDisplayEmail')) {
-                document.getElementById('targetDisplayEmail').innerText = emailVal;
-            }
-            showStage('email-auth'); // Use your existing function that switches screens
-        } else {
-            alert('Error: ' + data.error);
-        }
-    } catch (err) {
-        alert('Could not connect to the authentication server.');
+        // Re-render financial candlesticks correctly upon toggle
+        if (stageId === 'landing') drawCandlesticks('candlestickCanvasLanding');
+        if (stageId === 'trading') drawCandlesticks('candlestickCanvasTrading');
     }
-}
+
+    // Vector Eye Icon Input Controller Matrix
+    function togglePasswordVisibility(inputId, buttonEl) {
+        const inputField = document.getElementById(inputId);
+        const eyeIconSvg = buttonEl.querySelector('svg');
+        if (inputField.type === "password") {
+            inputField.type = "text";
+            // Switch to Slash Eye icon state vector geometry
+            eyeIconSvg.innerHTML = `<path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3 1.34-3 3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm11-3c-1.73-4.39-6-7.5-11-7.5S2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>`;
+            eyeIconSvg.style.fill = "var(--primary)";
+        } else {
+            inputField.type = "password";
+            // Return to Open Eye configuration
+            eyeIconSvg.innerHTML = `<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>`;
+            eyeIconSvg.style.fill = "var(--text-muted)";
+        }
+    }
+
+    // Main Account Registration Handler (with Live Backend Integration & Password Pipeline)
+    async function handleRegistrationSubmit() {
+        const userVal = document.getElementById('regUser').value.trim();
+        const emailVal = document.getElementById('regEmail').value.trim();
+        const passVal = document.getElementById('regPass').value;
+        const confirmVal = document.getElementById('regPassConfirm').value;
+
+        if (!userVal || !emailVal || !passVal || !confirmVal) {
+            return alert('All system identification credentials are required.');
+        }
+
+        if (passVal !== confirmVal) {
+            return alert('Security Error: Password fields do not match. Please verify inputs.');
+        }
+
+        // Save the email globally so the verification screen knows who is registering
+        window.globalUserEmail = emailVal;
+
+        try {
+            // Send username, email, and password registration payload to your API routing tier
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: userVal, email: emailVal, password: passVal })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Advance execution forward into the verification PIN grid screen layout
+                if (document.getElementById('targetDisplayEmail')) {
+                    document.getElementById('targetDisplayEmail').innerText = emailVal;
+                }
+                showStage('email-auth');
+            } else {
+                alert('Error: ' + data.error);
+            }
+        } catch (err) {
+            alert('Could not connect to the authentication server architecture node.');
+        }
+    }
+
+    function confirmEmailOtpToken() {
+        const enteredOtp = document.getElementById('emailOtpCode').value.trim().replace('-', '');
+        // System matching security parameter control token
+        if (enteredOtp !== "774902") {
+            return alert('Invalid Account Verification Code Token. Access Denied.');
+        }
+        // Proceed forward to KYC documentation page
+        showStage('verification');
+    }
+
+    function bypassToTradingDesk() {
+        document.getElementById('terminalUserTag').innerText = "OPERATOR: TRADER1";
+        document.getElementById('cryptoAddressString').innerText = "Deposit Address: TYR43AD79K88xM9qN2B77X";
+        document.getElementById('navAuthActions').innerHTML = `<button class="btn-outline" onclick="window.location.reload()" style="color:var(--primary); border-color:var(--primary);">Disconnect Node</button>`;
+        showStage('trading');
+        updateDashboard();
+    }
+
+    // High-fidelity Financial HTML5 Canvas Candlestick Engine
+    function drawCandlesticks(canvasId) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         
+        const candles = [
+            { o: 88, h: 96, l: 85, c: 94 }, { o: 94, h: 104, l: 92, c: 102 }, 
+            { o: 102, h: 103, l: 91, c: 93 }, { o: 93, h: 106, l: 92, c: 105 }, 
+            { o: 105, h: 115, l: 101, c: 112 }, { o: 112, h: 114, l: 100, c: 102 }, 
+            { o: 102, h: 109, l: 98, c: 107 }, { o: 107, h: 118, l: 104, c: 116 }, 
+            { o: 116, h: 124, l: 111, c: 121 }, { o: 121, h: 122, l: 109, c: 113 }, 
+            { o: 113, h: 128, l: 112, c: 126 }, { o: 126, h: 130, l: 118, c: 124 }
+        ];
+        
+        const spacing = canvas.width / candles.length;
+        const candleWidth = spacing * 0.65;
+        
+        candles.forEach((candle, index) => {
+            const x = index * spacing + spacing * 0.15;
+            const isGreen = candle.c >= candle.o;
+            ctx.strokeStyle = isGreen ? "#02c076" : "#f84960";
+            ctx.fillStyle = isGreen ? "#02c076" : "#f84960";
+            ctx.lineWidth = 2;
+            
+            // Draw wick limits
+            ctx.beginPath();
+            ctx.moveTo(x + candleWidth / 2, canvas.height - candle.h);
+            ctx.lineTo(x + candleWidth / 2, canvas.height - candle.l);
+            ctx.stroke();
+            
+            // Draw candle real body elements
+            const topY = canvas.height - Math.max(candle.o, candle.c);
+            const bodyHeight = Math.abs(candle.o - candle.c) || 2;
+            ctx.fillRect(x, topY, candleWidth, bodyHeight);
+        });
+    }
+
+    // Dynamic Live Order Execution & Simulation Engine
+    let userUsdBalance = 10000.00;
+    let userAssetAllocation = 0.0000;
+    let currentSpotPrice = 124.50;
+
+    function updateDashboard() {
+        if(document.getElementById('usd-bal')) document.getElementById('usd-bal').innerText = `$${userUsdBalance.toFixed(2)}`;
+        if(document.getElementById('asset-bal')) document.getElementById('asset-bal').innerText = `${userAssetAllocation.toFixed(4)} UNITS`;
+        if(document.getElementById('walletCryptoBalance')) document.getElementById('walletCryptoBalance').innerText = `${(userUsdBalance / 1.002).toFixed(2)} USDT`;
+        if(document.getElementById('market-price')) document.getElementById('market-price').innerText = `$${currentSpotPrice.toFixed(2)}`;
+        if(document.getElementById('landing-price')) document.getElementById('landing-price').innerText = `$${currentSpotPrice.toFixed(2)}`;
+    }
+
+    function handleTrade() {
+        const side = document.getElementById('trade-side').value;
+        const qty = parseFloat(document.getElementById('trade-qty').value);
+        if (isNaN(qty) || qty <= 0) return alert('Invalid volume allocation parameters.');
+        
+        const totalCost = qty * currentSpotPrice;
+        if (side === "BUY") {
+            if (totalCost > userUsdBalance) return alert('Insufficient USD funding limits available.');
+            userUsdBalance -= totalCost;
+            userAssetAllocation += qty;
+        } else {
+            if (qty > userAssetAllocation) return alert('Insufficient internal token reserves to cover contract side.');
+            userUsdBalance += totalCost;
+            userAssetAllocation -= qty;
         }
+        updateDashboard();
+        alert(`Order successful: Executed ${side} of ${qty} units.`);
+    }
 
-        function bypassToTradingDesk() {
-            document.getElementById('terminalUserTag').innerText = "OPERATOR: TRADER1";
-            document.getElementById('cryptoAddressString').innerText = "Deposit Address: TYR43AD79K88xM9qN2B77X";
-            document.getElementById('navAuthActions').innerHTML = `<button class="btn-outline" onclick="window.location.reload()" style="color:var(--primary); border-color:var(--primary);">Disconnect Node</button>`;
-            showStage('trading');
-            updateDashboard();
-        }
+    function handleDeposit() {
+        const amt = parseFloat(document.getElementById('deposit-amount').value);
+        if (isNaN(amt) || amt <= 0) return alert('Enter valid liquidity parameters.');
+        userUsdBalance += amt;
+        updateDashboard();
+        alert(`Funding pipeline complete. Inbound credit added.`);
+    }
 
-        // High-fidelity Financial HTML5 Canvas Candlestick Engine
-        function drawCandlesticks(canvasId) {
-            const canvas = document.getElementById(canvasId);
-            if(!canvas) return;
-            const ctx = canvas.getContext('2d');
-            
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            const candles = [
-                { o: 88, h: 96, l: 85, c: 94 }, { o: 94, h: 104, l: 92, c: 102 },
-                { o: 102, h: 103, l: 91, c: 93 }, { o: 93, h: 106, l: 92, c: 105 },
-                { o: 105, h: 115, l: 101, c: 112 }, { o: 112, h: 114, l: 100, c: 102 },
-                { o: 102, h: 109, l: 98, c: 107 }, { o: 107, h: 118, l: 104, c: 116 },
-                { o: 116, h: 124, l: 111, c: 121 }, { o: 121, h: 122, l: 109, c: 113 },
-                { o: 113, h: 128, l: 112, c: 126 }, { o: 126, h: 130, l: 118, c: 124 }
-            ];
-            
-            const spacing = canvas.width / candles.length;
-            const candleWidth = spacing * 0.65;
-            
-            candles.forEach((candle, index) => {
-                const x = (index * spacing) + (spacing * 0.18);
-                const isGreen = candle.c >= candle.o;
-                
-                const yOpen = canvas.height - (candle.o * 1.3);
-                const yClose = canvas.height - (candle.c * 1.3);
-                const yHigh = canvas.height - (candle.h * 1.3);
-                const yLow = canvas.height - (candle.l * 1.3);
-                
-                ctx.strokeStyle = isGreen ? '#02c076' : '#f84960';
-                ctx.fillStyle = isGreen ? '#02c076' : '#f84960';
-                ctx.lineWidth = 2;
-                
-                ctx.beginPath();
-                ctx.moveTo(x + candleWidth / 2, yHigh);
-                ctx.lineTo(x + candleWidth / 2, yLow);
-                ctx.stroke();
-                
-                ctx.fillRect(x, Math.min(yOpen, yClose), candleWidth, Math.max(2, Math.abs(yOpen - yClose)));
-            });
-        }
+    function handleWithdrawal() {
+        const amt = parseFloat(document.getElementById('withdraw-amount').value);
+        if (isNaN(amt) || amt <= 0) return alert('Enter valid clearance parameters.');
+        if (amt > userUsdBalance) return alert('Settlement balance exceeds accessible custody asset caps.');
+        userUsdBalance -= amt;
+        updateDashboard();
+        alert(`Withdrawal pipeline initialized. Pending blockchain node confirmation blocks.`);
+    }
 
-        // Live API Bridge Server Connections
-        async function updateDashboard() {
-            const userTarget = document.getElementById('regUser').value || 'trader1';
-            const res = await fetch(`/api/user/${userTarget}`);
-            const data = await res.json();
-            
-            document.getElementById('usd-bal').innerText = `$${data.balances.USD.toFixed(2)}`;
-            document.getElementById('walletCryptoBalance').innerText = `${data.balances.USD.toFixed(2)} USDT`;
-            document.getElementById('asset-bal').innerText = `${data.balances.ASSET.toFixed(4)} UNITS`;
-            
-            const priceString = `$${data.currentMarketPrice.toFixed(2)}`;
-            if(document.getElementById('market-price')) document.getElementById('market-price').innerText = priceString;
-            if(document.getElementById('landing-price')) document.getElementById('landing-price').innerText = priceString;
-            
-            drawCandlesticks('candlestickCanvasTrading');
-        }
-
-        async function handleDeposit() {
-            const userTarget = document.getElementById('regUser').value || 'trader1';
-            const amount = document.getElementById('deposit-amount').value;
-            if(!amount || amount <= 0) return alert('Please enter a valid amount.');
-
-            await fetch('/api/deposit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: userTarget, amount })
-            });
-            document.getElementById('deposit-amount').value = '';
-            updateDashboard();
-        }
-
-        async function handleWithdrawal() {
-            const userTarget = document.getElementById('regUser').value || 'trader1';
-            const amount = document.getElementById('withdraw-amount').value;
-            if(!amount || amount <= 0) return alert('Please enter a valid withdrawal value.');
-            
-            await fetch('/api/deposit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: userTarget, amount: -Math.abs(amount) })
-            });
-            document.getElementById('withdraw-amount').value = '';
-            updateDashboard();
-        }
-
-        async function handleTrade() {
-            const userTarget = document.getElementById('regUser').value || 'trader1';
-            const side = document.getElementById('trade-side').value;
-            const quantity = document.getElementById('trade-qty').value;
-            if(!quantity || quantity <= 0) return alert('Please input an active trade asset block size.');
-
-            await fetch('/api/trade', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: userTarget, side, quantity })
-            });
-            document.getElementById('trade-qty').value = '';
-            updateDashboard();
-        }
-
-        window.onload = () => {
-            drawCandlesticks('candlestickCanvasLanding');
-            fetch('/api/user/trader1').then(r => r.json()).then(data => {
-                const initialPrice = `$${data.currentMarketPrice.toFixed(2)}`;
-                document.getElementById('landing-price').innerText = initialPrice;
-            }).catch(() => {});
-        };
-    </script>
-</body>
-</html>
+    // Initialize global canvas renders on standard page landing context frame
+    window.onload = function() {
+        drawCandlesticks('candlestickCanvasLanding');
+        // Tick current feed price points across nodes randomly
+        setInterval(() => {
+            const shift = (Math.random() - 0.49) * 1.5;
+            currentSpotPrice = Math.max(10, currentSpotPrice + shift);
+            const priceLabel = document.getElementById('market-price');
+            if(priceLabel) priceLabel.innerText = `$${currentSpotPrice.toFixed(2)}`;
+            const landLabel = document.getElementById('landing-price');
+            if(landLabel) landLabel.innerText = `$${currentSpotPrice.toFixed(2)}`;
+        }, 3000);
+    };
+</script>
