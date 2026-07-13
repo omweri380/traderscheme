@@ -1,488 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>traderscheme.com | Premium Multi-Asset Trading Node</title>
-    <style>
-        :root {
-            --bg-main: #0b0f19;
-            --bg-card: #131a26;
-            --bg-input: #1b2434;
-            --primary: #f57c00;
-            --primary-hover: #e66a00;
-            --accent-green: #02c076;
-            --danger: #f84960;
-            --text-main: #f0f4f8;
-            --text-muted: #8491a5;
-            --border-color: #222e43;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: var(--bg-main);
-            color: var(--text-main);
-            padding: 0;
-            margin: 0;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .navbar {
-            background: var(--bg-card);
-            padding: 16px 24px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4 px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .brand-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .brand-logo {
-            width: 28px;
-            height: 28px;
-            fill: var(--primary);
-        }
-
-        .brand {
-            font-size: 21px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            color: var(--text-main);
-        }
-
-        .brand span {
-            color: var(--primary);
-        }
-
-        .nav-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        .network-banner {
-            background: #172131;
-            border-bottom: 1px solid var(--border-color);
-            padding: 10px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-muted);
-            letter-spacing: 0.5px;
-        }
-
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--accent-green);
-        }
-
-        .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--accent-green);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--accent-green);
-            animation: pulse-glow 1.8s infinite;
-        }
-
-        @keyframes pulse-glow {
-            0% { transform: scale(0.9); opacity: 0.5; }
-            50% { transform: scale(1.3); opacity: 1; }
-            100% { transform: scale(0.9); opacity: 0.5; }
-        }
-
-        .app-stage {
-            display: none;
-            max-width: 1100px;
-            margin: 32px auto;
-            padding: 0 16px;
-        }
-
-        .active-stage {
-            display: block;
-        }
-
-        .grid-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-
-        @media (max-width: 768px) {
-            .grid-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            padding: 32px;
-            border-radius: 12px;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-            box-sizing: border-box;
-            backdrop-filter: blur(10px);
-        }
-
-        .auth-centered-card {
-            max-width: 450px;
-            margin: 40px auto;
-            border-top: 4px solid var(--primary);
-        }
-
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        h2 {
-            margin-top: 0;
-            margin-bottom: 24px;
-            font-size: 15px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .wallet-container {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 1px solid rgba(245, 124, 0, 0.3);
-            color: #ffffff;
-            border-radius: 10px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
-        }
-
-        .wallet-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-        }
-
-        .wallet-crypto-addr {
-            font-family: 'Courier New', monospace;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            margin-top: 12px;
-            word-break: break-all;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            margin-bottom: 24px;
-        }
-
-        .metric-box {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            background: #16202e;
-        }
-
-        .metric-value {
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .chart-container {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            background: #0d131c;
-        }
-
-        label {
-            display: block;
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 14px 16px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-input);
-            color: var(--text-main);
-            box-sizing: border-box;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(245, 124, 0, 0.15);
-            background: #1f2a3d;
-        }
-
-        .password-container {
-            position: relative;
-            width: 100%;
-        }
-
-        .password-container input {
-            padding-right: 50px;
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 14px;
-            top: 13px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            z-index: 5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .toggle-password svg {
-            width: 20px;
-            height: 20px;
-            fill: var(--text-muted);
-            transition: fill 0.2s ease;
-        }
-
-        .toggle-password:hover svg {
-            fill: var(--primary);
-        }
-
-        button {
-            padding: 14px 24px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 14px;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .btn-green {
-            background: var(--primary);
-            color: #ffffff;
-        }
-
-        .btn-green:hover {
-            background: var(--primary-hover);
-            box-shadow: 0 6px 20px rgba(245, 124, 0, 0.3);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--text-main);
-            border: 2px solid var(--border-color);
-        }
-
-        .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: var(--text-muted);
-        }
-
-        .btn-full { width: 100%; padding: 16px; }
-    </style>
-</head>
-<body>
-
-    <!-- Global Navigation Header -->
-    <div class="navbar">
-        <div class="brand-container" onclick="showStage('landing')" style="cursor:pointer;">
-            <svg class="brand-logo" viewBox="0 0 24 24">
-                <path d="M3.5 18.5l6-6 4 4L22 6.5l-1.41-1.42-7.09 7.09-4-4-7.5 7.5L3.5 18.5z" />
-            </svg>
-            <div class="brand">trader<span>scheme</span></div>
-        </div>
-        <div class="nav-actions" id="navAuthActions">
-            <button class="btn-outline" onclick="showStage('login')">Sign In</button>
-            <button class="btn-green" onclick="showStage('register')">Create Account</button>
-        </div>
-    </div>
-
-    <!-- Live Status Banner -->
-    <div class="network-banner">
-        <div class="status-indicator">
-            <div class="pulse-dot"></div>
-            SECURE LIVE NETWORK FEED ACTIVE
-        </div>
-        <div id="terminalUserTag" style="color: var(--primary); font-weight: 700;">GUEST PROFILE</div>
-    </div>
-
-    <!-- STAGE 1: Public Dashboard Landing Screen -->
-    <div id="stage-landing" class="app-stage active-stage">
-        <div style="max-width:800px; margin: 60px auto; text-align:center;">
-            <h1 style="font-size:42px; font-weight:800; letter-spacing:-1.5px; margin-bottom:16px; background: linear-gradient(to right, #ffffff, #8491a5); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Institutional Multi-Asset Retail Desk</h1>
-            <p style="color:var(--text-muted); font-size:18px; margin-bottom:40px; max-width: 600px; margin-left: auto; margin-right: auto;">Execute live contract positions, track index pairs, and settle instantly to secure cryptographic hardware wallets.</p>
-        </div>
-        <div class="card">
-            <div style="display:flex; justify-content:space-between; margin-bottom:16px; align-items:center;">
-                <h2><span>●</span> Index Spot Reference Feed</h2>
-                <strong style="font-size:20px; color: var(--accent-green);" id="landing-price">$100.00</strong>
-            </div>
-            <canvas id="candlestickCanvasLanding" width="1000" height="220" style="width:100%; background:#0d131c; border-radius:8px; border:1px solid var(--border-color);"></canvas>
-            <div style="margin-top:32px; text-align:center;">
-                <button class="btn-green" style="padding:16px 48px; font-size: 15px;" onclick="showStage('register')">Initialize Safe Wallet Setup</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- STAGE 2: Account Registration -->
-    <div id="stage-register" class="app-stage">
-        <div class="card auth-centered-card">
-            <h2>Account Credentials Setup</h2>
-            <label>Username</label>
-            <input type="text" id="regUser" placeholder="e.g., alpha_trader">
-            
-            <label>Email Address</label>
-            <input type="email" id="regEmail" placeholder="name@example.com">
-            
-            <label>Password</label>
-            <div class="password-container">
-                <input type="password" id="regPass" placeholder="••••••••">
-                <button class="toggle-password" type="button" onclick="togglePasswordVisibility('regPass', this)">
-                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                </button>
-            </div>
-            
-            <label>Confirm Password</label>
-            <div class="password-container">
-                <input type="password" id="regPassConfirm" placeholder="••••••••">
-                <button class="toggle-password" type="button" onclick="togglePasswordVisibility('regPassConfirm', this)">
-                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                </button>
-            </div>
-            
-            <button class="btn-green btn-full" onclick="handleRegistrationSubmit()">Register Profile</button>
-        </div>
-    </div>
-
-    <!-- STAGE 3: OTP Verification -->
-    <div id="stage-email-auth" class="app-stage">
-        <div class="card auth-centered-card">
-            <h2>Verify Your Email</h2>
-            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">A verification code token has been routed to <span id="targetDisplayEmail" style="color: white; font-weight: bold;">your email</span>.</p>
-            <label>Enter 6-Digit PIN Code</label>
-            <input type="text" id="emailOtpCode" placeholder="774-902" style="text-align: center; font-size: 20px; font-family: monospace; letter-spacing: 2px;">
-            <button class="btn-green btn-full" onclick="confirmEmailOtpToken()">Confirm Token PIN</button>
-        </div>
-    </div>
-
-    <!-- STAGE 4: KYC / Verification -->
-    <div id="stage-verification" class="app-stage">
-        <div class="card auth-centered-card">
-            <h2>Identity Verification (KYC)</h2>
-            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">To connect real liquidity structures, institutional network verification parameters require verification.</p>
-            <label>Country of Residence</label>
-            <input type="text" placeholder="e.g., United States">
-            <label>Document Identification Number</label>
-            <input type="text" placeholder="Passport or Driver License ID">
-            <button class="btn-green btn-full" onclick="bypassToTradingDesk()">Complete Verification & Connect</button>
-        </div>
-    </div>
-
-    <!-- STAGE 5: Login / Authentication -->
-    <div id="stage-login" class="app-stage">
-        <div class="card auth-centered-card">
-            <h2>Sign In To Profile Node</h2>
-            <label>Email Address</label>
-            <input type="email" placeholder="name@example.com">
-            <label>Security Password</label>
-            <input type="password" placeholder="••••••••">
-            <button class="btn-green btn-full" onclick="bypassToTradingDesk()">Authorize Connection</button>
-        </div>
-    </div>
-
-    <!-- STAGE 6: Main Trading Dashboard / Terminal Desk -->
-    <div id="stage-trading" class="app-stage">
-        <div class="grid-layout">
-            <div class="full-width">
-                <div class="wallet-container">
-                    <div class="wallet-header">
-                        <span>Local Ledger Node State</span>
-                        <span style="color: var(--accent-green)">Connected</span>
-                    </div>
-                    <div class="wallet-crypto-addr">
-                        <span id="cryptoAddressString">Awaiting Identity Verification Parameters...</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Left Metric/Chart Column -->
-            <div class="chart-container">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h2>Terminal Chart Engine</h2>
-                    <span id="trading-price" style="font-size: 20px; font-weight: bold; color: var(--accent-green); font-family: monospace;">$100.00</span>
-                </div>
-                <canvas id="candlestickCanvasTrading" width="500" height="260" style="width:100%; background: #080c12; border-radius: 4px;"></canvas>
-            </div>
-
-            <!-- Right Execution Column -->
-            <div class="card">
-                <h2>Contract Execution Framework</h2>
-                <label>Instrument Asset</label>
-                <select>
-                    <option>Volatility 100 (1s) Index</option>
-                    <option>Deriv Broker Asset Gateway Stream</option>
-                </select>
-                
-                <label>Position Trade Amount (USD)</label>
-                <input type="number" value="10.00" style="font-family: monospace;">
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px;">
-                    <button class="btn-green" style="background: var(--accent-green); padding: 16px;" onclick="alert('Buy Order Executed Successfully')">BUY / CALL</button>
-                    <button class="btn-green" style="background: var(--danger); padding: 16px;" onclick="alert('Sell Order Executed Successfully')">SELL / PUT</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- App Engineering Routing Scripts -->
+<!-- App Engineering Routing & Live Broker Integration Scripts -->
     <script>
         // Central Routing Machine
         function showStage(stageId) {
@@ -491,8 +7,9 @@
                 document.querySelectorAll('.app-stage').forEach(el => el.classList.remove('active-stage'));
                 stage.classList.add('active-stage');
             }
-            if (stageId === 'landing') drawCandlesticks('candlestickCanvasLanding');
-            if (stageId === 'trading') drawCandlesticks('candlestickCanvasTrading');
+            // Draw initial chart outline when navigating
+            if (stageId === 'landing') drawCandlesticks('candlestickCanvasLanding', liveCandles);
+            if (stageId === 'trading') drawCandlesticks('candlestickCanvasTrading', liveCandles);
         }
 
         // Vector Eye Icon Input Controller Matrix
@@ -542,7 +59,7 @@
                     alert('Error: ' + data.error);
                 }
             } catch (err) {
-                // If backend isn't running yet, fall forward into the next stage for development testing
+                // Fallback for frontend-only testing
                 if (document.getElementById('targetDisplayEmail')) {
                     document.getElementById('targetDisplayEmail').innerText = emailVal;
                 }
@@ -563,26 +80,101 @@
             document.getElementById('cryptoAddressString').innerText = "Deposit Address: TYR43AD79K88xM9qN2B77X";
             document.getElementById('navAuthActions').innerHTML = `<button class="btn-outline" onclick="window.location.reload()" style="color:var(--primary); border-color:var(--primary);">Disconnect Node</button>`;
             showStage('trading');
-            updateDashboard();
         }
 
-        // Financial HTML5 Canvas Candlestick Engine
-        function drawCandlesticks(canvasId) {
+        // --- DERIV BROKER LIVE INTEGRATION ENGINE ---
+        let derivSocket;
+        let liveCandles = [];
+        const maxCandles = 20;
+
+        // Initialize connection to Deriv secure API WebSocket
+        function connectToDerivBroker() {
+            // Using Deriv's default public application ID '1089'
+            const appId = '1089'; 
+            derivSocket = new WebSocket(`wss://ws.derivws.com/v3/app_id=${appId}`);
+
+            derivSocket.onopen = () => {
+                console.log("Connected to Deriv Broker Link.");
+                // Subscribe to real-time tick stream for Volatility 100 Index (R_100)
+                derivSocket.send(JSON.stringify({
+                    ticks: 'R_100'
+                }));
+            };
+
+            derivSocket.onmessage = (event) => {
+                const response = JSON.parse(event.data);
+                
+                if (response.msg_type === 'tick' && response.tick) {
+                    const price = response.tick.quote;
+                    const timestamp = response.tick.epoch;
+                    
+                    // Update current price tags across UI stages
+                    const priceText = `$${parseFloat(price).toFixed(2)}`;
+                    if (document.getElementById('landing-price')) {
+                        document.getElementById('landing-price').innerText = priceText;
+                    }
+                    if (document.getElementById('trading-price')) {
+                        document.getElementById('trading-price').innerText = priceText;
+                    }
+
+                    // Process price updates into live visual candles
+                    processNewPriceTick(price);
+                }
+            };
+
+            derivSocket.onerror = (error) => {
+                console.error("Deriv Broker connection error: ", error);
+            };
+
+            derivSocket.onclose = () => {
+                console.log("Deriv Broker connection closed. Retrying in 5 seconds...");
+                setTimeout(connectToDerivBroker, 5000);
+            };
+        }
+
+        // Structure ticks into Candlestick OHLC format dynamically
+        function processNewPriceTick(price) {
+            if (liveCandles.length === 0) {
+                // Initialize first candle
+                liveCandles.push({ o: price, h: price, l: price, c: price, count: 1 });
+            } else {
+                let currentCandle = liveCandles[liveCandles.length - 1];
+                
+                // Group every 6 ticks into a single candlestick
+                if (currentCandle.count < 6) {
+                    currentCandle.h = Math.max(currentCandle.h, price);
+                    currentCandle.l = Math.min(currentCandle.l, price);
+                    currentCandle.c = price;
+                    currentCandle.count++;
+                } else {
+                    // Create new candle
+                    if (liveCandles.length >= maxCandles) {
+                        liveCandles.shift(); // Remove oldest to keep chart clean
+                    }
+                    liveCandles.push({ o: price, h: price, l: price, c: price, count: 1 });
+                }
+            }
+
+            // Redraw active canvas feeds with new coordinates
+            drawCandlesticks('candlestickCanvasLanding', liveCandles);
+            drawCandlesticks('candlestickCanvasTrading', liveCandles);
+        }
+
+        // Live Financial HTML5 Canvas Candlestick Engine
+        function drawCandlesticks(canvasId, candles) {
             const canvas = document.getElementById(canvasId);
-            if (!canvas) return;
+            if (!canvas || candles.length === 0) return;
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const candles = [
-                { o: 88, h: 96, l: 85, c: 94 }, { o: 94, h: 104, l: 92, c: 102 },
-                { o: 102, h: 103, l: 91, c: 93 }, { o: 93, h: 106, l: 92, c: 105 },
-                { o: 105, h: 115, l: 101, c: 112 }, { o: 112, h: 114, l: 100, c: 102 },
-                { o: 102, h: 109, l: 98, c: 107 }, { o: 107, h: 118, l: 104, c: 116 },
-                { o: 116, h: 124, l: 111, c: 121 }, { o: 121, h: 122, l: 109, c: 113 },
-                { o: 113, h: 128, l: 112, c: 126 }, { o: 126, h: 130, l: 118, c: 124 }
-            ];
+            // Dynamically scale candles based on high/low limits in current dataset
+            const highs = candles.map(c => c.h);
+            const lows = candles.map(c => c.l);
+            const minPrice = Math.min(...lows) * 0.9995;
+            const maxPrice = Math.max(...highs) * 1.0005;
+            const priceRange = maxPrice - minPrice;
 
-            const spacing = canvas.width / candles.length;
+            const spacing = canvas.width / maxCandles;
             const candleWidth = spacing * 0.65;
 
             candles.forEach((c, index) => {
@@ -592,33 +184,28 @@
                 ctx.fillStyle = isGreen ? "#02c076" : "#f84960";
                 ctx.lineWidth = 2;
 
-                // Wick lines
+                // Scale prices to canvas pixels
+                const scaleY = (val) => canvas.height - ((val - minPrice) / priceRange * canvas.height);
+
+                const yOpen = scaleY(c.o);
+                const yClose = scaleY(c.c);
+                const yHigh = scaleY(c.h);
+                const yLow = scaleY(c.l);
+
+                // Draw Wick (High to Low)
                 ctx.beginPath();
-                ctx.moveTo(x + candleWidth / 2, canvas.height - c.h);
-                ctx.lineTo(x + candleWidth / 2, canvas.height - c.l);
+                ctx.moveTo(x + candleWidth / 2, yHigh);
+                ctx.lineTo(x + candleWidth / 2, yLow);
                 ctx.stroke();
 
-                // Candle bodies
-                const y = canvas.height - Math.max(c.o, c.c);
-                const h = Math.abs(c.o - c.c) || 2;
-                ctx.fillRect(x, y, candleWidth, h);
+                // Draw Candle Body (Open to Close)
+                const bodyHeight = Math.max(Math.abs(yOpen - yClose), 2); // Minimum 2px height for flat ticks
+                ctx.fillRect(x, Math.min(yOpen, yClose), candleWidth, bodyHeight);
             });
         }
 
-        function updateDashboard() {
-            setInterval(() => {
-                const noise = (Math.random() - 0.5) * 1.5;
-                const price = 124.50 + noise;
-                const txt = `$${price.toFixed(2)}`;
-                if(document.getElementById('landing-price')) document.getElementById('landing-price').innerText = txt;
-                if(document.getElementById('trading-price')) document.getElementById('trading-price').innerText = txt;
-            }, 1000);
-        }
-
-        // Initialize Canvas charts on load
+        // Run broker data pipeline on initialization
         window.onload = function() {
-            drawCandlesticks('candlestickCanvasLanding');
+            connectToDerivBroker();
         };
     </script>
-</body>
-</html>
